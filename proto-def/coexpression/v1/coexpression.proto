@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package coexpression.v1;
+
+enum FilterOp {
+  FILTER_OP_UNSPECIFIED = 0;
+  FILTER_OP_GT = 1;
+  FILTER_OP_GTE = 2;
+  FILTER_OP_LT = 3;
+  FILTER_OP_LTE = 4;
+  FILTER_OP_EQ = 5;
+}
+
+message Filter {
+  FilterOp op = 1;
+  string key = 2;
+  string value = 3;
+}
+
+message CoExpressionEdge {
+  float corr = 1;
+  float pvalue = 2;
+  repeated string target = 3;
+  map<string, float> meta = 4;
+}
+
+message Meta {
+  string taxonomy_id = 1;
+  string version = 2;
+}
+
+message CoExpressionNetwork {
+  map<string, CoExpressionEdge> edges = 1;
+}
+
+message DFSRequest {
+  Meta meta = 1;
+  string start_gene = 2;
+  int32 depth = 3;
+  repeated Filter filters = 4;
+}
+
+message DFSResponse {
+  Meta meta = 1;
+  CoExpressionNetwork network = 3;
+}
+
+message RetriveCoExpressionRequest {
+  Meta meta = 1;
+  string gene_id = 3;
+  repeated Filter filters = 5;
+}
+
+message RetriveCoExpressionResponse {
+  Meta meta = 1;
+  string gene_id = 3;
+  CoExpressionEdge edges = 4;
+}
+
+message GetCoExpressionNetworkRequest {
+  Meta meta = 1;
+  repeated string gene_ids = 3;
+  repeated Filter filters = 4;
+}
+
+message GetCoExpressionNetworkResponse {
+  Meta meta = 1;
+  repeated string gene_ids = 3;
+  CoExpressionNetwork network = 4;
+}
+
+service CoExpressionService {
+  rpc DFS(DFSRequest) returns (DFSResponse);
+  rpc RetriveCoExpression(RetriveCoExpressionRequest) returns (RetriveCoExpressionResponse);
+  rpc GetCoExpressionNetwork(GetCoExpressionNetworkRequest) returns (GetCoExpressionNetworkResponse);
+}

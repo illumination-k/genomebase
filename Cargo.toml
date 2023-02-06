@@ -1,0 +1,13 @@
+[workspace]
+members = [
+  "common",
+  "genome",
+  "genome/genome-domain",
+  "co-expression/",
+  "co-expression/co-expression-domain",
+]
+
+[workspace.dependencies]
+serde = { version = "~1.0", features = ["derive"] }
+async-trait = "~0.1"
+anyhow = "~1.0"

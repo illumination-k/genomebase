@@ -1,0 +1,169 @@
+syntax = "proto3";
+
+package genome.v1;
+
+enum Strand {
+  STRAND_UNSPECIFIED = 0;
+  STRAND_PLUS = 1;
+  STRAND_MINUS = 2;
+}
+
+service GenomeService {}
+
+enum Analysis {
+  ANALYSIS_UNSPECIFIED = 0;
+  ANALYSIS_PFAM = 1;
+}
+
+message Domain {
+  string accession = 1;
+  string description = 2;
+  int32 start = 3;
+  int32 end = 4;
+  Analysis anlysis = 5;
+}
+
+message GoTerm {
+  string accession = 1;
+  string description = 2;
+  string namespace = 3;
+  string evidence_code = 4;
+  Author assigned_by = 5;
+}
+
+message Kog {
+  string accession = 1;
+  string description = 2;
+  string category = 3;
+}
+
+message KeggPathway {
+  string id = 1;
+  string name = 2;
+}
+
+message KeggReaction {
+  string id = 1;
+  string name = 2;
+}
+
+message KeggOrthology {
+  string id = 1;
+  string name = 2;
+}
+
+message Kegg {
+  KeggOrthology orthology = 1;
+  repeated KeggPathway related_pathways = 2;
+  repeated KeggReaction related_reactions = 3;
+}
+
+message GFFRecord {
+  string seqname = 1;
+  string source = 2;
+  string type = 3;
+  int32 start = 4;
+  int32 end = 5;
+  string score = 6;
+  Strand strand = 7;
+  string phase = 8;
+}
+
+message Transcript {
+  string id = 1;
+  bool is_primary = 2;
+  string transcript_type = 3;
+  Strand strand = 4;
+  int32 start = 5;
+  int32 end = 6;
+  repeated GFFRecord child_structure = 7;
+  Kog kog = 8;
+  repeated GoTerm go_terms = 9;
+  repeated Domain domains = 10;
+  Kegg kegg = 11;
+}
+
+message Author {
+  string name = 1;
+  string email = 2;
+  string orc_id = 3;
+}
+
+message Nomenclature {
+  string name = 1;
+  string product = 2;
+  string doi = 3;
+  Author assigned_by = 4;
+}
+
+message Gene {
+  string id = 1;
+  repeated Nomenclature nomenclatures = 2;
+  repeated Transcript transcripts = 3;
+}
+
+message RequestMeta {
+  string taxonomy_id = 1;
+  string genome_version = 2;
+}
+
+message RetriveGeneRequest {
+  RequestMeta meta = 1;
+  string id = 2;
+}
+
+message RetriveGeneResponse {
+  RequestMeta meta = 1;
+  Gene gene = 2;
+}
+
+message ListGenesRequest {
+  RequestMeta meta = 1;
+  repeated string gene_ids = 2;
+}
+
+message ListGenesResponse {
+  RequestMeta meta = 1;
+  repeated Gene genes = 2;
+}
+
+message ConvertNomenclatureToGeneIDRequest {
+  RequestMeta meta = 1;
+  repeated string names = 2;
+}
+
+message ConvertNomenclatureToGeneIDResponse {
+  RequestMeta meta = 1;
+  repeated string ids = 2;
+}
+
+service GeneService {
+  rpc RetriveGene(RetriveGeneRequest) returns (RetriveGeneResponse);
+  rpc ListGenes(ListGenesRequest) returns (ListGenesResponse);
+  rpc ConvertNomenclatureToGeneID(ConvertNomenclatureToGeneIDRequest) returns (ConvertNomenclatureToGeneIDResponse);
+}
+
+enum SequenceType {
+  SEQUENCE_TYPE_UNSPECIFIED = 0;
+  SEQUENCE_TYPE_PROTEIN = 1;
+  SEQUENCE_TYPE_CDS = 2;
+  SEQUENCE_TYPE_TRANSCRIPT = 3;
+  SEQUENCE_TYPE_EXON = 4;
+}
+
+message GetSequenceRequest {
+  RequestMeta meta = 1;
+  string transcript_id = 2;
+  SequenceType sequence_type = 3;
+}
+
+message GetSequenceResponse {
+  RequestMeta meta = 1;
+  string transcript_id = 2;
+  SequenceType sequence_type = 3;
+  string sequence = 4;
+}
+
+service TranscriptService {
+  rpc GetSequence(GetSequenceRequest) returns (GetSequenceResponse);
+}
