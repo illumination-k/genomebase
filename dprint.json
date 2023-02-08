@@ -13,7 +13,9 @@
   "excludes": [
     "**/node_modules",
     "**/*-lock.json",
-    "**/target"
+    "**/target",
+    "**/gen",
+    "**/.next"
   ],
   "plugins": [
     "https://plugins.dprint.dev/typescript-0.82.0.wasm",
