@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package genome.v1;
+package genomebase_genome.v1;
 
 enum Strand {
   STRAND_UNSPECIFIED = 0;

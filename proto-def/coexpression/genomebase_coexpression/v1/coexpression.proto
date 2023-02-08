@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package coexpression.v1;
+package genomebase_coexpression.v1;
 
 enum FilterOp {
   FILTER_OP_UNSPECIFIED = 0;

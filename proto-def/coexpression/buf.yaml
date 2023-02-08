@@ -1,0 +1,8 @@
+version: v1
+name: buf.build/illumination-k/genomebase-coexpression
+breaking:
+  use:
+    - FILE
+lint:
+  use:
+    - DEFAULT
