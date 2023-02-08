@@ -1,1 +1,1 @@
-# Well Defined API and Components For Genome, Expression and Co-Expression Database
+# Well Defined API and Components for Genome, Expression and Co-Expression Database
