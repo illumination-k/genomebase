@@ -1,5 +1,24 @@
 #!/bin/bash
 
+<<<<<<< HEAD
+=======
+
+## Run local check and lint
+readonly ROOT_DIR=$(git rev-parse --show-superproject-working-tree --show-toplevel | grep "^/")
+
+echo "--- Checking format ---"
+cd "$ROOT_DIR"
+dprint check
+
+echo "--- Running buf CI and Push buf.build ---"
+cd "$ROOT_DIR/proto-def"
+buf format --exit-code --diff
+buf lint
+buf push genome
+buf push coexpression
+
+## Prevent from push to main branch
+>>>>>>> f8a4d6fcc181ff667e2435e260b1a41c2103e30c
 readonly REJECT_PUSH_BRANCHES=('main')
 
 while read local_ref local_sha1 remote_ref remote_sha1
@@ -11,3 +30,6 @@ do
         fi
     done
 done
+
+
+
