@@ -10,7 +10,7 @@ dprint check
 
 echo "--- Running buf CI and Push buf.build ---"
 cd "$ROOT_DIR/proto-def"
-buf format --exit-code
+buf format --exit-code --diff
 buf lint
 buf push genome
 buf push coexpression
