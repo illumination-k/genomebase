@@ -1,6 +1,6 @@
 #!/bin/bash
 
-readonly REJECT_PUSH_BRANCHES=('master' 'develop')
+readonly REJECT_PUSH_BRANCHES=('main')
 
 while read local_ref local_sha1 remote_ref remote_sha1
 do
