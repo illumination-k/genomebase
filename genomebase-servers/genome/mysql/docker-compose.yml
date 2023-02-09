@@ -1,0 +1,24 @@
+version: "3.4"
+
+services:
+  mysql:
+    image: mysql:5.7
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+      TZ: 'Asia/Tokyo'
+      
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+      interval: 30s
+      timeout: 5s
+      retries: 10
+
+    # --skip-grant-tableは開発環境でのDEBUG用
+    # root userにpasswordなしでアクセス可能
+    command: "mysqld --max_allowed_packet=256M"
