@@ -1,6 +1,9 @@
+use anyhow::Result;
 use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
+
+use crate::{impl_term_serde, term_id_deserializer, term_id_serializer, TermID};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum EvidenceCode {
@@ -111,7 +114,20 @@ impl ToString for GoTermNamespace {
     }
 }
 
-pub type GoTermID = String;
+#[derive(Debug, Clone, PartialEq)]
+pub struct GoTermID(String);
+
+impl TermID for GoTermID {
+    fn try_new(id: &str) -> Result<Self> {
+        Ok(Self(id.to_string()))
+    }
+
+    fn id(&self) -> String {
+        self.0.to_owned()
+    }
+}
+
+impl_term_serde!(GoTermID);
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GoTerm {
@@ -130,5 +146,5 @@ pub struct GoTerm {
 pub struct GoTermAnnotation {
     evidence_code: EvidenceCode,
     term: GoTerm,
-    assinged_by: common::User,
+    assinged_by: Option<common::User>,
 }
