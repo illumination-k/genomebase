@@ -148,3 +148,5 @@ pub struct GoTermAnnotation {
     term: GoTerm,
     assinged_by: Option<common::User>,
 }
+
+pub struct GoDAG(HashMap<GoTermID, GoTerm>);

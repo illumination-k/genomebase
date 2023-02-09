@@ -77,7 +77,7 @@ pub struct Annotation {
 }
 
 #[cfg(test)]
-mod test_ {
+mod test_kegg {
     use super::*;
     use anyhow::Result;
     use serde_test::{assert_tokens, Token};
