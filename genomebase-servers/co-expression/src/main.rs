@@ -14,7 +14,6 @@ async fn main() -> Result<()> {
     let db = client.database("co-expression");
 
     let collection = db.collection::<mongo::CorrealtionDocument>("test");
-    collection.insert_many(vec![], None).await?;
 
     Ok(())
 }

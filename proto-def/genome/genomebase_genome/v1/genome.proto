@@ -105,6 +105,7 @@ message Gene {
 message RequestMeta {
   string taxonomy_id = 1;
   string genome_version = 2;
+  string annotation_version = 3;
 }
 
 message RetriveGeneRequest {
