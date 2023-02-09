@@ -1,12 +1,12 @@
 version: v1
 plugins:
   - plugin: buf.build/bufbuild/es
-    out: gen
+    out: gen/es
     # With target=ts, we generate TypeScript files.
     # Use target=js+dts to generate JavaScript and TypeScript declaration files
     # like remote generation does.
     opt: target=ts
   - plugin: buf.build/bufbuild/connect-web
-    out: gen
+    out: gen/connect-web
     # With target=ts, we generate TypeScript files.
     opt: target=ts
