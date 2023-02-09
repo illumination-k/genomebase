@@ -161,6 +161,7 @@ name = "common"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "derive-new",
  "serde",
 ]
 
@@ -279,6 +280,17 @@ name = "derivative"
 version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fcc3dd5e9e9c0b295d6e1e4d811fb6f157d5ffd784b8d202fc62eac8035a770b"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "derive-new"
+version = "0.5.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3418329ca0ad70234b9735dc4ceed10af4df60eff9c8e7b06cb5e520d92c3535"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -409,7 +421,6 @@ name = "genome"
 version = "0.1.0"
 dependencies = [
  "genome-domain",
- "maplit",
 ]
 
 [[package]]
@@ -419,6 +430,7 @@ dependencies = [
  "anyhow",
  "async-trait",
  "common",
+ "derive-new",
  "paste",
  "serde",
  "serde_test",
@@ -632,12 +644,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "maplit"
-version = "1.0.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3e2e65a1a2e43cfcb47a895c4c8b10d1f4a61097f9f254f183aee60cad9c651d"
-
-[[package]]
 name = "match_cfg"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -721,6 +727,10 @@ dependencies = [
  "uuid 0.8.2",
  "webpki-roots",
 ]
+
+[[package]]
+name = "mysql"
+version = "0.1.0"
 
 [[package]]
 name = "num-integer"

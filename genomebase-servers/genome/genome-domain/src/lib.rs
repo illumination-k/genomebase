@@ -1,6 +1,7 @@
 mod go_term;
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use async_trait::async_trait;
+use derive_new::new;
 pub use go_term::*;
 
 mod kog;
@@ -31,6 +32,12 @@ pub fn term_id_deserializer<'de, D: Deserializer<'de>, T: TermID>(d: D) -> Resul
 #[macro_export]
 macro_rules! impl_term_serde {
     ($term_name: ident) => {
+        impl ToString for $term_name {
+            fn to_string(&self) -> String {
+                self.id()
+            }
+        }
+
         impl Serialize for $term_name {
             fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
             where
@@ -93,6 +100,11 @@ pub trait IOrganismRepository {
 
 #[async_trait]
 pub trait IGenomeRepository {
+    async fn retrive_genome(
+        &self,
+        taxonomy_id: &str,
+        genome_version: &str,
+    ) -> Option<HashMap<String, String>>;
     async fn upsert_genome(
         &self,
         taxonomy_id: &str,
@@ -136,12 +148,15 @@ pub trait IAnnotationModelRepository {
         model_version: &str,
         genes: &[Gene],
     ) -> Result<()>;
+    async fn search(&self, word: &str) -> Vec<Gene>;
+    async fn convert_to_gene_id(&self, s: &[&str]) -> Result<String>;
+    async fn convert_to_gene_ids(&self, ss: &[&str]) -> Result<Vec<String>>;
 }
 
 pub struct GenomeService<O, A, G> {
-    organism_repository: O,
-    genome_repository: G,
-    annotation_repository: A,
+    pub organism_repository: O,
+    pub genome_repository: G,
+    pub annotation_repository: A,
 }
 
 impl<O, A, G> GenomeService<O, A, G>
@@ -235,6 +250,16 @@ where
         genome_version: &str,
         genes: &[Gene],
     ) -> Result<()> {
+        if self
+            .genome_repository
+            .retrive_genome(taxonomy_id, genome_version)
+            .await
+            .is_none()
+        {
+            return Err(anyhow!(
+                "genome version is not found. Please register genome first."
+            ));
+        }
         self.register_organims(taxonomy_id, None, Some(annotation_version))
             .await?;
         self.annotation_repository
@@ -243,17 +268,18 @@ where
         self.annotation_repository
             .bulk_upsert_genes(taxonomy_id, annotation_version, genes)
             .await?;
+
         Ok(())
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, new)]
 pub struct Gene {
-    id: String,
+    pub id: String,
     transcripts: Vec<Transcript>,
     nomenclatures: Vec<Nomenclature>,
-    paper: Vec<common::Paper>,
     other_model_ids: HashMap<String, String>,
+    paper: Vec<common::Paper>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -270,11 +296,13 @@ pub enum TranscriptType {
     Transposon,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, new)]
 pub struct Transcript {
     id: String,
-    gene_id: String,
-    type_: TranscriptType,
+    transcript_type: TranscriptType,
+    start: i32,
+    end: i32,
+    strand: Strand,
 
     // Annotation
     kog: Option<Kog>,
@@ -283,12 +311,12 @@ pub struct Transcript {
     domains: Vec<DomainAnnotation>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, new)]
 pub struct Nomenclature {
     name: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, new)]
 pub struct DomainAnnotation {
     start: usize,
     end: usize,

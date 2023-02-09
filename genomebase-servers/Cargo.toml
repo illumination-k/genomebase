@@ -3,6 +3,7 @@ members = [
   "common",
   "genome",
   "genome/genome-domain",
+  "genome/mysql",
   "co-expression/",
   "co-expression/co-expression-domain",
 ]
@@ -11,3 +12,4 @@ members = [
 serde = { version = "~1.0", features = ["derive"] }
 async-trait = "~0.1"
 anyhow = "~1.0"
+derive-new = "0.5.9"

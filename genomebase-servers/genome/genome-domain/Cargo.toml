@@ -9,6 +9,7 @@ edition = "2021"
 anyhow = { workspace = true }
 async-trait = { workspace = true }
 common = { path = "../../common" }
+derive-new = { workspace = true }
 paste = "1.0.11"
 serde = { workspace = true }
 
