@@ -2,7 +2,7 @@ use crate::{impl_term_serde, term_id_deserializer, term_id_serializer, TermID};
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct KogID(String);
 
 impl TermID for KogID {
@@ -10,14 +10,14 @@ impl TermID for KogID {
         Ok(Self(id.to_string()))
     }
 
-    fn id(&self) -> String {
-        self.0.to_owned()
+    fn id(&self) -> &String {
+        &self.0
     }
 }
 
 impl_term_serde!(KogID);
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Eq, PartialOrd, Ord)]
 pub enum KogCategory {
     A,
     K,
@@ -47,9 +47,23 @@ pub enum KogCategory {
     X,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Eq, PartialOrd, Ord)]
 pub struct Kog {
     id: KogID,
     category: KogCategory,
     description: String,
+}
+
+impl Kog {
+    pub fn id(&self) -> &KogID {
+        &self.id
+    }
+
+    pub fn category(&self) -> &KogCategory {
+        &self.category
+    }
+
+    pub fn description(&self) -> &String {
+        &self.description
+    }
 }

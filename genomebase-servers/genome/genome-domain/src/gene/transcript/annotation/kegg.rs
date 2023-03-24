@@ -4,6 +4,13 @@ use serde::{Deserialize, Serialize};
 
 use crate::{impl_term_serde, term_id_deserializer, term_id_serializer, TermID};
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum KeggType {
+    Orthology,
+    Pathway,
+    Reaction,
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub struct OrthologyID(String);
 
@@ -12,8 +19,8 @@ impl TermID for OrthologyID {
         Ok(Self(id.to_string()))
     }
 
-    fn id(&self) -> String {
-        self.0.to_owned()
+    fn id(&self) -> &String {
+        &self.0
     }
 }
 
@@ -25,8 +32,8 @@ impl TermID for PathwayID {
         Ok(Self(id.to_string()))
     }
 
-    fn id(&self) -> String {
-        self.0.to_owned()
+    fn id(&self) -> &String {
+        &self.0
     }
 }
 
@@ -38,8 +45,8 @@ impl TermID for ReactionID {
         Ok(Self(id.to_string()))
     }
 
-    fn id(&self) -> String {
-        self.0.to_owned()
+    fn id(&self) -> &String {
+        &self.0
     }
 }
 
@@ -70,10 +77,16 @@ impl_kegg_value!(Pathway);
 impl_kegg_value!(Reaction);
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Annotation {
+pub struct KeggAnnotation {
+    transcript_id: String,
     orthology: Orthology,
     related_pathways: Vec<Pathway>,
     related_reactions: Vec<Reaction>,
+}
+
+#[async_trait::async_trait]
+pub trait KeggRepository {
+    async fn retrive_orthology(id: OrthologyID) -> Result<Option<Orthology>>;
 }
 
 #[cfg(test)]

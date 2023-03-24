@@ -1,7 +1,7 @@
 use anyhow::Result;
 use std::collections::HashMap;
 
-use serde::{Deserialize, Serialize};
+use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
 
 use crate::{impl_term_serde, term_id_deserializer, term_id_serializer, TermID};
 
@@ -97,19 +97,40 @@ impl EvidenceCode {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub enum GoTermNamespace {
     BiologicalProcess,
     MolecularFunction,
     CellerComponent,
 }
 
-impl ToString for GoTermNamespace {
-    fn to_string(&self) -> String {
+impl Serialize for GoTermNamespace {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
         match self {
-            GoTermNamespace::BiologicalProcess => "BP".to_string(),
-            GoTermNamespace::CellerComponent => "CC".to_string(),
-            GoTermNamespace::MolecularFunction => "MF".to_string(),
+            GoTermNamespace::BiologicalProcess => serializer.serialize_str("BP"),
+            GoTermNamespace::MolecularFunction => serializer.serialize_str("MF"),
+            GoTermNamespace::CellerComponent => serializer.serialize_str("CC"),
+        }
+    }
+}
+
+impl<'de> Deserialize<'de> for GoTermNamespace {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let s = String::deserialize(deserializer)?;
+        match s.as_str() {
+            "BP" => Ok(GoTermNamespace::BiologicalProcess),
+            "MF" => Ok(GoTermNamespace::MolecularFunction),
+            "CC" => Ok(GoTermNamespace::CellerComponent),
+            _ => Err(serde::de::Error::custom(format!(
+                "Invalid GO term namespace: {}",
+                s
+            ))),
         }
     }
 }
@@ -122,8 +143,8 @@ impl TermID for GoTermID {
         Ok(Self(id.to_string()))
     }
 
-    fn id(&self) -> String {
-        self.0.to_owned()
+    fn id(&self) -> &String {
+        &self.0
     }
 }
 
@@ -148,5 +169,3 @@ pub struct GoTermAnnotation {
     term: GoTerm,
     assinged_by: Option<common::User>,
 }
-
-pub struct GoDAG(HashMap<GoTermID, GoTerm>);
