@@ -15,7 +15,7 @@ enum Analysis {
   ANALYSIS_PFAM = 1;
 }
 
-message Domain {
+message DomainAnnotation {
   string accession = 1;
   string description = 2;
   int32 start = 3;
@@ -67,6 +67,7 @@ message GFFRecord {
   string score = 6;
   Strand strand = 7;
   string phase = 8;
+  map<string, string> attributes = 9;
 }
 
 message Transcript {
@@ -79,7 +80,7 @@ message Transcript {
   repeated GFFRecord child_structure = 7;
   Kog kog = 8;
   repeated GoTerm go_terms = 9;
-  repeated Domain domains = 10;
+  repeated DomainAnnotation domains = 10;
   Kegg kegg = 11;
 }
 

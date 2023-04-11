@@ -1,31 +1,31 @@
 use std::collections::BTreeSet;
+use uuid::Uuid;
 
 use anyhow::Result;
+use derive_new::new;
 use serde::{Deserialize, Serialize};
-
-use crate::GeneModel;
 
 use self::transcript::{
     annotation::kog::{Kog, KogID},
     Trasncript,
 };
 
-mod transcript;
+pub mod transcript;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, new)]
 pub struct Gene {
-    id: String,
-    gene_model: GeneModel,
+    id: Uuid,
+    gene_id: String,
     transcripts: Vec<Trasncript>,
 }
 
 impl Gene {
-    pub fn id(&self) -> &String {
+    pub fn id(&self) -> &Uuid {
         &self.id
     }
 
-    pub fn gene_model(&self) -> &GeneModel {
-        &self.gene_model
+    pub fn gene_id(&self) -> &String {
+        &self.gene_id
     }
 
     pub fn transcripts(&self) -> &Vec<Trasncript> {
@@ -40,6 +40,10 @@ impl Gene {
             .collect();
 
         bset.into_iter().collect()
+    }
+
+    pub fn push_transcript(&mut self, transcript: Trasncript) {
+        self.transcripts.push(transcript);
     }
 }
 

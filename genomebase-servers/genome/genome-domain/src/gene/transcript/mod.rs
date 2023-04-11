@@ -4,6 +4,7 @@ use std::collections::HashMap;
 
 use anyhow::anyhow;
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 use self::annotation::FunctionalAnnotation;
 
@@ -59,10 +60,10 @@ impl<'de> Deserialize<'de> for Strand {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, derive_new::new)]
 pub struct Trasncript {
-    id: String,
-    gene_id: String,
+    id: Uuid,
+    transcript_id: String,
     transcript_type: String,
     start: i32,
     end: i32,
@@ -72,12 +73,12 @@ pub struct Trasncript {
 }
 
 impl Trasncript {
-    pub fn id(&self) -> &String {
+    pub fn id(&self) -> &Uuid {
         &self.id
     }
 
-    pub fn gene_id(&self) -> &String {
-        &self.gene_id
+    pub fn transcript_id(&self) -> &String {
+        &self.transcript_id
     }
 
     pub fn transcript_type(&self) -> &String {

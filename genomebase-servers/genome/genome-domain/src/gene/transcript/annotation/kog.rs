@@ -1,5 +1,6 @@
 use crate::{impl_term_serde, term_id_deserializer, term_id_serializer, TermID};
 use anyhow::Result;
+use derive_new::new;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
@@ -47,7 +48,7 @@ pub enum KogCategory {
     X,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Eq, PartialOrd, Ord, new)]
 pub struct Kog {
     id: KogID,
     category: KogCategory,

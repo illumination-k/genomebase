@@ -4,7 +4,6 @@ members = [
   "genome",
   "genome/genome-domain",
   "genome/mysql",
-  "genome/mysql/migration",
   "co-expression/",
   "co-expression/co-expression-domain",
 ]

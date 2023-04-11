@@ -7,5 +7,5 @@ edition = "2021"
 
 [dependencies]
 async-trait = "0.1.64"
-serde = { workspace = true }
 derive-new = { workspace = true }
+serde = { workspace = true }

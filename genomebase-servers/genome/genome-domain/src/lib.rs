@@ -59,19 +59,37 @@ macro_rules! impl_term_serde {
 pub struct Organism {
     taxonomy_id: u32,
     name: String,
-    genomes: Vec<Genome>,
+    genome_versions: Vec<GenomeVersion>,
+}
+
+impl Organism {
+    pub fn taxonomy_id(&self) -> u32 {
+        self.taxonomy_id
+    }
+
+    pub fn name(&self) -> &String {
+        &self.name
+    }
+
+    pub fn genome_versions(&self) -> &Vec<GenomeVersion> {
+        &self.genome_versions
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize, new)]
-pub struct Genome {
-    genome_version: String,
-    annotation_models: Vec<AnnotationModel>,
+pub struct GenomeVersion {
+    major: u8,
+    minor: u8,
+    patch: u8,
+    annotation_versions: Vec<AnnotationVersion>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize, new)]
 
-pub struct AnnotationModel {
-    version: String,
+pub struct AnnotationVersion {
+    major: u8,
+    minor: u8,
+    patch: u8,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize, new)]
@@ -82,13 +100,27 @@ pub struct GeneModel {
     annotation_model_version: String,
 }
 
+impl GeneModel {
+    pub fn taxonomy_id(&self) -> u32 {
+        self.taxonomy_id
+    }
+
+    pub fn genome_version(&self) -> &String {
+        &self.genome_version
+    }
+
+    pub fn annotation_model_version(&self) -> &String {
+        &self.annotation_model_version
+    }
+}
+
 /*
 必要な機能
 - Organismの登録、取得、削除
 */
 #[async_trait::async_trait]
 pub trait IOrganismRepository {
-    async fn register_organism(&self, organism: &Organism) -> Result<()>;
+    async fn save_organism(&self, organism: &Organism) -> Result<()>;
     async fn list_organisms(&self) -> Result<Vec<Organism>>;
     async fn get_organism(&self, taxonomy_id: u32) -> Result<Option<Organism>>;
     async fn delete_organism(&self, taxonomy_id: u32) -> Result<()>;
@@ -132,11 +164,11 @@ impl GenomeService {
         self.gene_repositories.get(gene_model)
     }
 
-    pub async fn list_genomes(&self, taxonomy_id: u32) -> Result<Vec<Genome>> {
+    pub async fn list_genome_versions(&self, taxonomy_id: u32) -> Result<Vec<GenomeVersion>> {
         let organism = self.organism_repository.get_organism(taxonomy_id).await?;
 
         Ok(if let Some(o) = organism {
-            o.genomes
+            o.genome_versions
         } else {
             vec![]
         })
@@ -201,7 +233,7 @@ impl GenomeService {
                         .zip(pvals.iter())
                         .zip(fdr.iter())
                         .map(|((term, pval), qval)| EnrichmentResult::new(term, *pval, *qval))
-                        .collect())
+                        .collect());
                 }
             }
         } else {

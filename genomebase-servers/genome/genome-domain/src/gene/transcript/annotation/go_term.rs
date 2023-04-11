@@ -45,7 +45,7 @@ pub struct EvidenceCodeMeta {
 }
 
 impl EvidenceCodeMeta {
-    pub fn new(code: &str, id: &str, category: &str, description: &str) -> Self {
+    fn new(code: &str, id: &str, category: &str, description: &str) -> Self {
         Self {
             code: code.to_string(),
             id: id.to_string(),
