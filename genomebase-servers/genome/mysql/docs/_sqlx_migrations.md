@@ -21,25 +21,25 @@ CREATE TABLE `_sqlx_migrations` (
 
 ## Columns
 
-| Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
-| ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
-| version | bigint |  | false |  |  |  |  |
-| description | text |  | false |  |  |  |  |
-| installed_on | timestamp | CURRENT_TIMESTAMP | false | DEFAULT_GENERATED |  |  |  |
-| success | tinyint(1) |  | false |  |  |  |  |
-| checksum | blob |  | false |  |  |  |  |
-| execution_time | bigint |  | false |  |  |  |  |
+| Name           | Type       | Default           | Nullable | Extra Definition  | Children | Parents | Comment |
+| -------------- | ---------- | ----------------- | -------- | ----------------- | -------- | ------- | ------- |
+| version        | bigint     |                   | false    |                   |          |         |         |
+| description    | text       |                   | false    |                   |          |         |         |
+| installed_on   | timestamp  | CURRENT_TIMESTAMP | false    | DEFAULT_GENERATED |          |         |         |
+| success        | tinyint(1) |                   | false    |                   |          |         |         |
+| checksum       | blob       |                   | false    |                   |          |         |         |
+| execution_time | bigint     |                   | false    |                   |          |         |         |
 
 ## Constraints
 
-| Name | Type | Definition |
-| ---- | ---- | ---------- |
+| Name    | Type        | Definition            |
+| ------- | ----------- | --------------------- |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (version) |
 
 ## Indexes
 
-| Name | Definition |
-| ---- | ---------- |
+| Name    | Definition                        |
+| ------- | --------------------------------- |
 | PRIMARY | PRIMARY KEY (version) USING BTREE |
 
 ## Relations

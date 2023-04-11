@@ -26,31 +26,31 @@ CREATE TABLE `go_terms_annotation` (
 
 ## Columns
 
-| Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
-| ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
-| go_term_id | varchar(255) |  | false |  |  | [go_terms](go_terms.md) |  |
-| transcript_id | binary(16) |  | false |  |  | [transcripts](transcripts.md) |  |
-| evidence_code | char(3) |  | false |  |  |  |  |
-| created_at | datetime | CURRENT_TIMESTAMP | true | DEFAULT_GENERATED |  |  |  |
-| updated_at | datetime | CURRENT_TIMESTAMP | true | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |  |  |  |
-| assisgned_by | binary(16) |  | true |  |  | [users](users.md) |  |
+| Name          | Type         | Default           | Nullable | Extra Definition                              | Children | Parents                       | Comment |
+| ------------- | ------------ | ----------------- | -------- | --------------------------------------------- | -------- | ----------------------------- | ------- |
+| go_term_id    | varchar(255) |                   | false    |                                               |          | [go_terms](go_terms.md)       |         |
+| transcript_id | binary(16)   |                   | false    |                                               |          | [transcripts](transcripts.md) |         |
+| evidence_code | char(3)      |                   | false    |                                               |          |                               |         |
+| created_at    | datetime     | CURRENT_TIMESTAMP | true     | DEFAULT_GENERATED                             |          |                               |         |
+| updated_at    | datetime     | CURRENT_TIMESTAMP | true     | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |          |                               |         |
+| assisgned_by  | binary(16)   |                   | true     |                                               |          | [users](users.md)             |         |
 
 ## Constraints
 
-| Name | Type | Definition |
-| ---- | ---- | ---------- |
-| go_terms_annotation_ibfk_1 | FOREIGN KEY | FOREIGN KEY (go_term_id) REFERENCES go_terms (id) |
+| Name                       | Type        | Definition                                              |
+| -------------------------- | ----------- | ------------------------------------------------------- |
+| go_terms_annotation_ibfk_1 | FOREIGN KEY | FOREIGN KEY (go_term_id) REFERENCES go_terms (id)       |
 | go_terms_annotation_ibfk_2 | FOREIGN KEY | FOREIGN KEY (transcript_id) REFERENCES transcripts (id) |
-| go_terms_annotation_ibfk_3 | FOREIGN KEY | FOREIGN KEY (assisgned_by) REFERENCES users (id) |
-| PRIMARY | PRIMARY KEY | PRIMARY KEY (go_term_id, transcript_id) |
+| go_terms_annotation_ibfk_3 | FOREIGN KEY | FOREIGN KEY (assisgned_by) REFERENCES users (id)        |
+| PRIMARY                    | PRIMARY KEY | PRIMARY KEY (go_term_id, transcript_id)                 |
 
 ## Indexes
 
-| Name | Definition |
-| ---- | ---------- |
-| assisgned_by | KEY assisgned_by (assisgned_by) USING BTREE |
-| transcript_id | KEY transcript_id (transcript_id) USING BTREE |
-| PRIMARY | PRIMARY KEY (go_term_id, transcript_id) USING BTREE |
+| Name          | Definition                                          |
+| ------------- | --------------------------------------------------- |
+| assisgned_by  | KEY assisgned_by (assisgned_by) USING BTREE         |
+| transcript_id | KEY transcript_id (transcript_id) USING BTREE       |
+| PRIMARY       | PRIMARY KEY (go_term_id, transcript_id) USING BTREE |
 
 ## Relations
 

@@ -22,27 +22,27 @@ CREATE TABLE `annotation_models` (
 
 ## Columns
 
-| Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
-| ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
-| id | binary(16) | uuid_to_bin(uuid()) | false | DEFAULT_GENERATED | [gene_models](gene_models.md) |  |  |
-| version | varchar(255) |  | false |  |  |  |  |
-| genome_id | binary(16) |  | false |  |  | [genomes](genomes.md) |  |
-| created_at | datetime | CURRENT_TIMESTAMP | true | DEFAULT_GENERATED |  |  |  |
-| updated_at | datetime | CURRENT_TIMESTAMP | true | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |  |  |  |
+| Name       | Type         | Default             | Nullable | Extra Definition                              | Children                      | Parents               | Comment |
+| ---------- | ------------ | ------------------- | -------- | --------------------------------------------- | ----------------------------- | --------------------- | ------- |
+| id         | binary(16)   | uuid_to_bin(uuid()) | false    | DEFAULT_GENERATED                             | [gene_models](gene_models.md) |                       |         |
+| version    | varchar(255) |                     | false    |                                               |                               |                       |         |
+| genome_id  | binary(16)   |                     | false    |                                               |                               | [genomes](genomes.md) |         |
+| created_at | datetime     | CURRENT_TIMESTAMP   | true     | DEFAULT_GENERATED                             |                               |                       |         |
+| updated_at | datetime     | CURRENT_TIMESTAMP   | true     | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |                               |                       |         |
 
 ## Constraints
 
-| Name | Type | Definition |
-| ---- | ---- | ---------- |
+| Name                     | Type        | Definition                                      |
+| ------------------------ | ----------- | ----------------------------------------------- |
 | annotation_models_ibfk_1 | FOREIGN KEY | FOREIGN KEY (genome_id) REFERENCES genomes (id) |
-| PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
+| PRIMARY                  | PRIMARY KEY | PRIMARY KEY (id)                                |
 
 ## Indexes
 
-| Name | Definition |
-| ---- | ---------- |
+| Name      | Definition                            |
+| --------- | ------------------------------------- |
 | genome_id | KEY genome_id (genome_id) USING BTREE |
-| PRIMARY | PRIMARY KEY (id) USING BTREE |
+| PRIMARY   | PRIMARY KEY (id) USING BTREE          |
 
 ## Relations
 

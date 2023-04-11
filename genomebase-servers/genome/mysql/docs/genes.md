@@ -21,27 +21,27 @@ CREATE TABLE `genes` (
 
 ## Columns
 
-| Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
-| ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
-| id | binary(16) | uuid_to_bin(uuid()) | false | DEFAULT_GENERATED | [transcripts](transcripts.md) |  |  |
-| gene_id | varchar(255) |  | false |  |  |  |  |
-| gene_model_id | binary(16) |  | false |  |  | [gene_models](gene_models.md) |  |
+| Name          | Type         | Default             | Nullable | Extra Definition  | Children                      | Parents                       | Comment |
+| ------------- | ------------ | ------------------- | -------- | ----------------- | ----------------------------- | ----------------------------- | ------- |
+| id            | binary(16)   | uuid_to_bin(uuid()) | false    | DEFAULT_GENERATED | [transcripts](transcripts.md) |                               |         |
+| gene_id       | varchar(255) |                     | false    |                   |                               |                               |         |
+| gene_model_id | binary(16)   |                     | false    |                   |                               | [gene_models](gene_models.md) |         |
 
 ## Constraints
 
-| Name | Type | Definition |
-| ---- | ---- | ---------- |
-| gene_id | UNIQUE | UNIQUE KEY gene_id (gene_id, gene_model_id) |
+| Name         | Type        | Definition                                              |
+| ------------ | ----------- | ------------------------------------------------------- |
+| gene_id      | UNIQUE      | UNIQUE KEY gene_id (gene_id, gene_model_id)             |
 | genes_ibfk_1 | FOREIGN KEY | FOREIGN KEY (gene_model_id) REFERENCES gene_models (id) |
-| PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
+| PRIMARY      | PRIMARY KEY | PRIMARY KEY (id)                                        |
 
 ## Indexes
 
-| Name | Definition |
-| ---- | ---------- |
-| gene_model_id | KEY gene_model_id (gene_model_id) USING BTREE |
-| PRIMARY | PRIMARY KEY (id) USING BTREE |
-| gene_id | UNIQUE KEY gene_id (gene_id, gene_model_id) USING BTREE |
+| Name          | Definition                                              |
+| ------------- | ------------------------------------------------------- |
+| gene_model_id | KEY gene_model_id (gene_model_id) USING BTREE           |
+| PRIMARY       | PRIMARY KEY (id) USING BTREE                            |
+| gene_id       | UNIQUE KEY gene_id (gene_id, gene_model_id) USING BTREE |
 
 ## Relations
 

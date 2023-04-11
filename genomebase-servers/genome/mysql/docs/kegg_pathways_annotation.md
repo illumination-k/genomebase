@@ -22,27 +22,27 @@ CREATE TABLE `kegg_pathways_annotation` (
 
 ## Columns
 
-| Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
-| ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
-| kegg_pathway_id | varchar(255) |  | false |  |  | [kegg_pathways](kegg_pathways.md) |  |
-| transcript_id | binary(16) |  | false |  |  | [transcripts](transcripts.md) |  |
-| created_at | datetime | CURRENT_TIMESTAMP | true | DEFAULT_GENERATED |  |  |  |
-| updated_at | datetime | CURRENT_TIMESTAMP | true | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |  |  |  |
+| Name            | Type         | Default           | Nullable | Extra Definition                              | Children | Parents                           | Comment |
+| --------------- | ------------ | ----------------- | -------- | --------------------------------------------- | -------- | --------------------------------- | ------- |
+| kegg_pathway_id | varchar(255) |                   | false    |                                               |          | [kegg_pathways](kegg_pathways.md) |         |
+| transcript_id   | binary(16)   |                   | false    |                                               |          | [transcripts](transcripts.md)     |         |
+| created_at      | datetime     | CURRENT_TIMESTAMP | true     | DEFAULT_GENERATED                             |          |                                   |         |
+| updated_at      | datetime     | CURRENT_TIMESTAMP | true     | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |          |                                   |         |
 
 ## Constraints
 
-| Name | Type | Definition |
-| ---- | ---- | ---------- |
+| Name                            | Type        | Definition                                                  |
+| ------------------------------- | ----------- | ----------------------------------------------------------- |
 | kegg_pathways_annotation_ibfk_1 | FOREIGN KEY | FOREIGN KEY (kegg_pathway_id) REFERENCES kegg_pathways (id) |
-| kegg_pathways_annotation_ibfk_2 | FOREIGN KEY | FOREIGN KEY (transcript_id) REFERENCES transcripts (id) |
-| PRIMARY | PRIMARY KEY | PRIMARY KEY (kegg_pathway_id, transcript_id) |
+| kegg_pathways_annotation_ibfk_2 | FOREIGN KEY | FOREIGN KEY (transcript_id) REFERENCES transcripts (id)     |
+| PRIMARY                         | PRIMARY KEY | PRIMARY KEY (kegg_pathway_id, transcript_id)                |
 
 ## Indexes
 
-| Name | Definition |
-| ---- | ---------- |
-| transcript_id | KEY transcript_id (transcript_id) USING BTREE |
-| PRIMARY | PRIMARY KEY (kegg_pathway_id, transcript_id) USING BTREE |
+| Name          | Definition                                               |
+| ------------- | -------------------------------------------------------- |
+| transcript_id | KEY transcript_id (transcript_id) USING BTREE            |
+| PRIMARY       | PRIMARY KEY (kegg_pathway_id, transcript_id) USING BTREE |
 
 ## Relations
 

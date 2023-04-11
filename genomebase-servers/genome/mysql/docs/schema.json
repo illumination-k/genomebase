@@ -1,1 +1,1541 @@
-{"name":"test","desc":"","tables":[{"name":"_sqlx_migrations","type":"BASE TABLE","comment":"","columns":[{"name":"version","type":"bigint","nullable":false,"default":null,"comment":""},{"name":"description","type":"text","nullable":false,"default":null,"comment":""},{"name":"installed_on","type":"timestamp","nullable":false,"default":"CURRENT_TIMESTAMP","extra_def":"DEFAULT_GENERATED","comment":""},{"name":"success","type":"tinyint(1)","nullable":false,"default":null,"comment":""},{"name":"checksum","type":"blob","nullable":false,"default":null,"comment":""},{"name":"execution_time","type":"bigint","nullable":false,"default":null,"comment":""}],"indexes":[{"name":"PRIMARY","def":"PRIMARY KEY (version) USING BTREE","table":"_sqlx_migrations","columns":["version"],"comment":""}],"constraints":[{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (version)","table":"_sqlx_migrations","referenced_table":null,"columns":["version"],"referenced_columns":null,"comment":""}],"triggers":[],"def":"CREATE TABLE `_sqlx_migrations` (\n  `version` bigint NOT NULL,\n  `description` text NOT NULL,\n  `installed_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  `success` tinyint(1) NOT NULL,\n  `checksum` blob NOT NULL,\n  `execution_time` bigint NOT NULL,\n  PRIMARY KEY (`version`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"},{"name":"annotation_models","type":"BASE TABLE","comment":"","columns":[{"name":"id","type":"binary(16)","nullable":false,"default":"uuid_to_bin(uuid())","extra_def":"DEFAULT_GENERATED","comment":""},{"name":"version","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"genome_id","type":"binary(16)","nullable":false,"default":null,"comment":""},{"name":"created_at","type":"datetime","nullable":true,"default":"CURRENT_TIMESTAMP","extra_def":"DEFAULT_GENERATED","comment":""},{"name":"updated_at","type":"datetime","nullable":true,"default":"CURRENT_TIMESTAMP","extra_def":"DEFAULT_GENERATED on update CURRENT_TIMESTAMP","comment":""}],"indexes":[{"name":"genome_id","def":"KEY genome_id (genome_id) USING BTREE","table":"annotation_models","columns":["genome_id"],"comment":""},{"name":"PRIMARY","def":"PRIMARY KEY (id) USING BTREE","table":"annotation_models","columns":["id"],"comment":""}],"constraints":[{"name":"annotation_models_ibfk_1","type":"FOREIGN KEY","def":"FOREIGN KEY (genome_id) REFERENCES genomes (id)","table":"annotation_models","referenced_table":"genomes","columns":["genome_id"],"referenced_columns":["id"],"comment":""},{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (id)","table":"annotation_models","referenced_table":null,"columns":["id"],"referenced_columns":null,"comment":""}],"triggers":[],"def":"CREATE TABLE `annotation_models` (\n  `id` binary(16) NOT NULL DEFAULT (uuid_to_bin(uuid())),\n  `version` varchar(255) NOT NULL,\n  `genome_id` binary(16) NOT NULL,\n  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,\n  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  PRIMARY KEY (`id`),\n  KEY `genome_id` (`genome_id`),\n  CONSTRAINT `annotation_models_ibfk_1` FOREIGN KEY (`genome_id`) REFERENCES `genomes` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"},{"name":"domain_annotations","type":"BASE TABLE","comment":"","columns":[{"name":"domain_id","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"transcript_id","type":"binary(16)","nullable":false,"default":null,"comment":""},{"name":"start","type":"int","nullable":false,"default":null,"comment":""},{"name":"end","type":"int","nullable":false,"default":null,"comment":""}],"indexes":[{"name":"transcript_id","def":"KEY transcript_id (transcript_id) USING BTREE","table":"domain_annotations","columns":["transcript_id"],"comment":""},{"name":"PRIMARY","def":"PRIMARY KEY (domain_id, transcript_id) USING BTREE","table":"domain_annotations","columns":["domain_id","transcript_id"],"comment":""}],"constraints":[{"name":"domain_annotations_ibfk_1","type":"FOREIGN KEY","def":"FOREIGN KEY (domain_id) REFERENCES domains (id)","table":"domain_annotations","referenced_table":"domains","columns":["domain_id"],"referenced_columns":["id"],"comment":""},{"name":"domain_annotations_ibfk_2","type":"FOREIGN KEY","def":"FOREIGN KEY (transcript_id) REFERENCES transcripts (id)","table":"domain_annotations","referenced_table":"transcripts","columns":["transcript_id"],"referenced_columns":["id"],"comment":""},{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (domain_id, transcript_id)","table":"domain_annotations","referenced_table":null,"columns":["domain_id","transcript_id"],"referenced_columns":null,"comment":""}],"triggers":[],"def":"CREATE TABLE `domain_annotations` (\n  `domain_id` varchar(255) NOT NULL,\n  `transcript_id` binary(16) NOT NULL,\n  `start` int NOT NULL,\n  `end` int NOT NULL,\n  PRIMARY KEY (`domain_id`,`transcript_id`),\n  KEY `transcript_id` (`transcript_id`),\n  CONSTRAINT `domain_annotations_ibfk_1` FOREIGN KEY (`domain_id`) REFERENCES `domains` (`id`),\n  CONSTRAINT `domain_annotations_ibfk_2` FOREIGN KEY (`transcript_id`) REFERENCES `transcripts` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"},{"name":"domains","type":"BASE TABLE","comment":"","columns":[{"name":"id","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"name","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"description","type":"text","nullable":false,"default":null,"comment":""}],"indexes":[{"name":"PRIMARY","def":"PRIMARY KEY (id) USING BTREE","table":"domains","columns":["id"],"comment":""}],"constraints":[{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (id)","table":"domains","referenced_table":null,"columns":["id"],"referenced_columns":null,"comment":""}],"triggers":[],"def":"CREATE TABLE `domains` (\n  `id` varchar(255) NOT NULL,\n  `name` varchar(255) NOT NULL,\n  `description` text NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"},{"name":"gene_models","type":"BASE TABLE","comment":"","columns":[{"name":"id","type":"binary(16)","nullable":false,"default":"uuid_to_bin(uuid())","extra_def":"DEFAULT_GENERATED","comment":""},{"name":"taxonomy_id","type":"int unsigned","nullable":false,"default":null,"comment":""},{"name":"genome_id","type":"binary(16)","nullable":false,"default":null,"comment":""},{"name":"annotation_model_id","type":"binary(16)","nullable":false,"default":null,"comment":""}],"indexes":[{"name":"annotation_model_id","def":"KEY annotation_model_id (annotation_model_id) USING BTREE","table":"gene_models","columns":["annotation_model_id"],"comment":""},{"name":"genome_id","def":"KEY genome_id (genome_id) USING BTREE","table":"gene_models","columns":["genome_id"],"comment":""},{"name":"taxonomy_id","def":"KEY taxonomy_id (taxonomy_id) USING BTREE","table":"gene_models","columns":["taxonomy_id"],"comment":""},{"name":"PRIMARY","def":"PRIMARY KEY (id) USING BTREE","table":"gene_models","columns":["id"],"comment":""}],"constraints":[{"name":"gene_models_ibfk_1","type":"FOREIGN KEY","def":"FOREIGN KEY (taxonomy_id) REFERENCES organisms (taxonomy_id)","table":"gene_models","referenced_table":"organisms","columns":["taxonomy_id"],"referenced_columns":["taxonomy_id"],"comment":""},{"name":"gene_models_ibfk_2","type":"FOREIGN KEY","def":"FOREIGN KEY (genome_id) REFERENCES genomes (id)","table":"gene_models","referenced_table":"genomes","columns":["genome_id"],"referenced_columns":["id"],"comment":""},{"name":"gene_models_ibfk_3","type":"FOREIGN KEY","def":"FOREIGN KEY (annotation_model_id) REFERENCES annotation_models (id)","table":"gene_models","referenced_table":"annotation_models","columns":["annotation_model_id"],"referenced_columns":["id"],"comment":""},{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (id)","table":"gene_models","referenced_table":null,"columns":["id"],"referenced_columns":null,"comment":""}],"triggers":[],"def":"CREATE TABLE `gene_models` (\n  `id` binary(16) NOT NULL DEFAULT (uuid_to_bin(uuid())),\n  `taxonomy_id` int unsigned NOT NULL,\n  `genome_id` binary(16) NOT NULL,\n  `annotation_model_id` binary(16) NOT NULL,\n  PRIMARY KEY (`id`),\n  KEY `taxonomy_id` (`taxonomy_id`),\n  KEY `genome_id` (`genome_id`),\n  KEY `annotation_model_id` (`annotation_model_id`),\n  CONSTRAINT `gene_models_ibfk_1` FOREIGN KEY (`taxonomy_id`) REFERENCES `organisms` (`taxonomy_id`),\n  CONSTRAINT `gene_models_ibfk_2` FOREIGN KEY (`genome_id`) REFERENCES `genomes` (`id`),\n  CONSTRAINT `gene_models_ibfk_3` FOREIGN KEY (`annotation_model_id`) REFERENCES `annotation_models` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"},{"name":"genes","type":"BASE TABLE","comment":"","columns":[{"name":"id","type":"binary(16)","nullable":false,"default":"uuid_to_bin(uuid())","extra_def":"DEFAULT_GENERATED","comment":""},{"name":"gene_id","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"gene_model_id","type":"binary(16)","nullable":false,"default":null,"comment":""}],"indexes":[{"name":"gene_model_id","def":"KEY gene_model_id (gene_model_id) USING BTREE","table":"genes","columns":["gene_model_id"],"comment":""},{"name":"PRIMARY","def":"PRIMARY KEY (id) USING BTREE","table":"genes","columns":["id"],"comment":""},{"name":"gene_id","def":"UNIQUE KEY gene_id (gene_id, gene_model_id) USING BTREE","table":"genes","columns":["gene_id","gene_model_id"],"comment":""}],"constraints":[{"name":"gene_id","type":"UNIQUE","def":"UNIQUE KEY gene_id (gene_id, gene_model_id)","table":"genes","referenced_table":null,"columns":["gene_id","gene_model_id"],"referenced_columns":null,"comment":""},{"name":"genes_ibfk_1","type":"FOREIGN KEY","def":"FOREIGN KEY (gene_model_id) REFERENCES gene_models (id)","table":"genes","referenced_table":"gene_models","columns":["gene_model_id"],"referenced_columns":["id"],"comment":""},{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (id)","table":"genes","referenced_table":null,"columns":["id"],"referenced_columns":null,"comment":""}],"triggers":[],"def":"CREATE TABLE `genes` (\n  `id` binary(16) NOT NULL DEFAULT (uuid_to_bin(uuid())),\n  `gene_id` varchar(255) NOT NULL,\n  `gene_model_id` binary(16) NOT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `gene_id` (`gene_id`,`gene_model_id`),\n  KEY `gene_model_id` (`gene_model_id`),\n  CONSTRAINT `genes_ibfk_1` FOREIGN KEY (`gene_model_id`) REFERENCES `gene_models` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"},{"name":"genomes","type":"BASE TABLE","comment":"","columns":[{"name":"id","type":"binary(16)","nullable":false,"default":"uuid_to_bin(uuid())","extra_def":"DEFAULT_GENERATED","comment":""},{"name":"genome_version","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"organism_taxonomy_id","type":"int unsigned","nullable":false,"default":null,"comment":""},{"name":"created_at","type":"datetime","nullable":true,"default":"CURRENT_TIMESTAMP","extra_def":"DEFAULT_GENERATED","comment":""},{"name":"updated_at","type":"datetime","nullable":true,"default":"CURRENT_TIMESTAMP","extra_def":"DEFAULT_GENERATED on update CURRENT_TIMESTAMP","comment":""}],"indexes":[{"name":"organism_taxonomy_id","def":"KEY organism_taxonomy_id (organism_taxonomy_id) USING BTREE","table":"genomes","columns":["organism_taxonomy_id"],"comment":""},{"name":"PRIMARY","def":"PRIMARY KEY (id) USING BTREE","table":"genomes","columns":["id"],"comment":""}],"constraints":[{"name":"genomes_ibfk_1","type":"FOREIGN KEY","def":"FOREIGN KEY (organism_taxonomy_id) REFERENCES organisms (taxonomy_id)","table":"genomes","referenced_table":"organisms","columns":["organism_taxonomy_id"],"referenced_columns":["taxonomy_id"],"comment":""},{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (id)","table":"genomes","referenced_table":null,"columns":["id"],"referenced_columns":null,"comment":""}],"triggers":[],"def":"CREATE TABLE `genomes` (\n  `id` binary(16) NOT NULL DEFAULT (uuid_to_bin(uuid())),\n  `genome_version` varchar(255) NOT NULL,\n  `organism_taxonomy_id` int unsigned NOT NULL,\n  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,\n  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  PRIMARY KEY (`id`),\n  KEY `organism_taxonomy_id` (`organism_taxonomy_id`),\n  CONSTRAINT `genomes_ibfk_1` FOREIGN KEY (`organism_taxonomy_id`) REFERENCES `organisms` (`taxonomy_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"},{"name":"gff_records","type":"BASE TABLE","comment":"","columns":[{"name":"id","type":"binary(16)","nullable":false,"default":"uuid_to_bin(uuid())","extra_def":"DEFAULT_GENERATED","comment":""},{"name":"gene_model_id","type":"binary(16)","nullable":false,"default":null,"comment":""},{"name":"seqname","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"source","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"type","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"start","type":"int","nullable":false,"default":null,"comment":""},{"name":"end","type":"int","nullable":false,"default":null,"comment":""},{"name":"score","type":"float","nullable":false,"default":null,"comment":""},{"name":"strand","type":"char(1)","nullable":false,"default":null,"comment":""},{"name":"phase","type":"char(1)","nullable":false,"default":null,"comment":""},{"name":"attributes","type":"json","nullable":false,"default":null,"comment":""}],"indexes":[{"name":"gene_model_id","def":"KEY gene_model_id (gene_model_id) USING BTREE","table":"gff_records","columns":["gene_model_id"],"comment":""},{"name":"idx_gff_records_seqname_start_end","def":"KEY idx_gff_records_seqname_start_end (seqname, start, end) USING BTREE","table":"gff_records","columns":["seqname","start","end"],"comment":""},{"name":"PRIMARY","def":"PRIMARY KEY (id) USING BTREE","table":"gff_records","columns":["id"],"comment":""}],"constraints":[{"name":"gff_records_ibfk_1","type":"FOREIGN KEY","def":"FOREIGN KEY (gene_model_id) REFERENCES gene_models (id)","table":"gff_records","referenced_table":"gene_models","columns":["gene_model_id"],"referenced_columns":["id"],"comment":""},{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (id)","table":"gff_records","referenced_table":null,"columns":["id"],"referenced_columns":null,"comment":""}],"triggers":[],"def":"CREATE TABLE `gff_records` (\n  `id` binary(16) NOT NULL DEFAULT (uuid_to_bin(uuid())),\n  `gene_model_id` binary(16) NOT NULL,\n  `seqname` varchar(255) NOT NULL,\n  `source` varchar(255) NOT NULL,\n  `type` varchar(255) NOT NULL,\n  `start` int NOT NULL,\n  `end` int NOT NULL,\n  `score` float NOT NULL,\n  `strand` char(1) NOT NULL,\n  `phase` char(1) NOT NULL,\n  `attributes` json NOT NULL,\n  PRIMARY KEY (`id`),\n  KEY `gene_model_id` (`gene_model_id`),\n  KEY `idx_gff_records_seqname_start_end` (`seqname`,`start`,`end`),\n  CONSTRAINT `gff_records_ibfk_1` FOREIGN KEY (`gene_model_id`) REFERENCES `gene_models` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"},{"name":"go_terms","type":"BASE TABLE","comment":"","columns":[{"name":"id","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"name","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"namespace","type":"enum('BP','CC','MF')","nullable":false,"default":null,"comment":""},{"name":"definition","type":"text","nullable":false,"default":null,"comment":""}],"indexes":[{"name":"PRIMARY","def":"PRIMARY KEY (id) USING BTREE","table":"go_terms","columns":["id"],"comment":""}],"constraints":[{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (id)","table":"go_terms","referenced_table":null,"columns":["id"],"referenced_columns":null,"comment":""}],"triggers":[],"def":"CREATE TABLE `go_terms` (\n  `id` varchar(255) NOT NULL,\n  `name` varchar(255) NOT NULL,\n  `namespace` enum('BP','CC','MF') NOT NULL,\n  `definition` text NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"},{"name":"go_terms_annotation","type":"BASE TABLE","comment":"","columns":[{"name":"go_term_id","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"transcript_id","type":"binary(16)","nullable":false,"default":null,"comment":""},{"name":"evidence_code","type":"char(3)","nullable":false,"default":null,"comment":""},{"name":"created_at","type":"datetime","nullable":true,"default":"CURRENT_TIMESTAMP","extra_def":"DEFAULT_GENERATED","comment":""},{"name":"updated_at","type":"datetime","nullable":true,"default":"CURRENT_TIMESTAMP","extra_def":"DEFAULT_GENERATED on update CURRENT_TIMESTAMP","comment":""},{"name":"assisgned_by","type":"binary(16)","nullable":true,"default":null,"comment":""}],"indexes":[{"name":"assisgned_by","def":"KEY assisgned_by (assisgned_by) USING BTREE","table":"go_terms_annotation","columns":["assisgned_by"],"comment":""},{"name":"transcript_id","def":"KEY transcript_id (transcript_id) USING BTREE","table":"go_terms_annotation","columns":["transcript_id"],"comment":""},{"name":"PRIMARY","def":"PRIMARY KEY (go_term_id, transcript_id) USING BTREE","table":"go_terms_annotation","columns":["go_term_id","transcript_id"],"comment":""}],"constraints":[{"name":"go_terms_annotation_ibfk_1","type":"FOREIGN KEY","def":"FOREIGN KEY (go_term_id) REFERENCES go_terms (id)","table":"go_terms_annotation","referenced_table":"go_terms","columns":["go_term_id"],"referenced_columns":["id"],"comment":""},{"name":"go_terms_annotation_ibfk_2","type":"FOREIGN KEY","def":"FOREIGN KEY (transcript_id) REFERENCES transcripts (id)","table":"go_terms_annotation","referenced_table":"transcripts","columns":["transcript_id"],"referenced_columns":["id"],"comment":""},{"name":"go_terms_annotation_ibfk_3","type":"FOREIGN KEY","def":"FOREIGN KEY (assisgned_by) REFERENCES users (id)","table":"go_terms_annotation","referenced_table":"users","columns":["assisgned_by"],"referenced_columns":["id"],"comment":""},{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (go_term_id, transcript_id)","table":"go_terms_annotation","referenced_table":null,"columns":["go_term_id","transcript_id"],"referenced_columns":null,"comment":""}],"triggers":[],"def":"CREATE TABLE `go_terms_annotation` (\n  `go_term_id` varchar(255) NOT NULL,\n  `transcript_id` binary(16) NOT NULL,\n  `evidence_code` char(3) NOT NULL,\n  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,\n  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  `assisgned_by` binary(16) DEFAULT NULL,\n  PRIMARY KEY (`go_term_id`,`transcript_id`),\n  KEY `transcript_id` (`transcript_id`),\n  KEY `assisgned_by` (`assisgned_by`),\n  CONSTRAINT `go_terms_annotation_ibfk_1` FOREIGN KEY (`go_term_id`) REFERENCES `go_terms` (`id`),\n  CONSTRAINT `go_terms_annotation_ibfk_2` FOREIGN KEY (`transcript_id`) REFERENCES `transcripts` (`id`),\n  CONSTRAINT `go_terms_annotation_ibfk_3` FOREIGN KEY (`assisgned_by`) REFERENCES `users` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"},{"name":"kegg_orthologies","type":"BASE TABLE","comment":"","columns":[{"name":"id","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"name","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"description","type":"text","nullable":false,"default":null,"comment":""}],"indexes":[{"name":"PRIMARY","def":"PRIMARY KEY (id) USING BTREE","table":"kegg_orthologies","columns":["id"],"comment":""}],"constraints":[{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (id)","table":"kegg_orthologies","referenced_table":null,"columns":["id"],"referenced_columns":null,"comment":""}],"triggers":[],"def":"CREATE TABLE `kegg_orthologies` (\n  `id` varchar(255) NOT NULL,\n  `name` varchar(255) NOT NULL,\n  `description` text NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"},{"name":"kegg_orthologies_annotation","type":"BASE TABLE","comment":"","columns":[{"name":"kegg_orthology_id","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"transcript_id","type":"binary(16)","nullable":false,"default":null,"comment":""},{"name":"created_at","type":"datetime","nullable":true,"default":"CURRENT_TIMESTAMP","extra_def":"DEFAULT_GENERATED","comment":""},{"name":"updated_at","type":"datetime","nullable":true,"default":"CURRENT_TIMESTAMP","extra_def":"DEFAULT_GENERATED on update CURRENT_TIMESTAMP","comment":""}],"indexes":[{"name":"transcript_id","def":"KEY transcript_id (transcript_id) USING BTREE","table":"kegg_orthologies_annotation","columns":["transcript_id"],"comment":""},{"name":"PRIMARY","def":"PRIMARY KEY (kegg_orthology_id, transcript_id) USING BTREE","table":"kegg_orthologies_annotation","columns":["kegg_orthology_id","transcript_id"],"comment":""}],"constraints":[{"name":"kegg_orthologies_annotation_ibfk_1","type":"FOREIGN KEY","def":"FOREIGN KEY (kegg_orthology_id) REFERENCES kegg_orthologies (id)","table":"kegg_orthologies_annotation","referenced_table":"kegg_orthologies","columns":["kegg_orthology_id"],"referenced_columns":["id"],"comment":""},{"name":"kegg_orthologies_annotation_ibfk_2","type":"FOREIGN KEY","def":"FOREIGN KEY (transcript_id) REFERENCES transcripts (id)","table":"kegg_orthologies_annotation","referenced_table":"transcripts","columns":["transcript_id"],"referenced_columns":["id"],"comment":""},{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (kegg_orthology_id, transcript_id)","table":"kegg_orthologies_annotation","referenced_table":null,"columns":["kegg_orthology_id","transcript_id"],"referenced_columns":null,"comment":""}],"triggers":[],"def":"CREATE TABLE `kegg_orthologies_annotation` (\n  `kegg_orthology_id` varchar(255) NOT NULL,\n  `transcript_id` binary(16) NOT NULL,\n  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,\n  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  PRIMARY KEY (`kegg_orthology_id`,`transcript_id`),\n  KEY `transcript_id` (`transcript_id`),\n  CONSTRAINT `kegg_orthologies_annotation_ibfk_1` FOREIGN KEY (`kegg_orthology_id`) REFERENCES `kegg_orthologies` (`id`),\n  CONSTRAINT `kegg_orthologies_annotation_ibfk_2` FOREIGN KEY (`transcript_id`) REFERENCES `transcripts` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"},{"name":"kegg_pathways","type":"BASE TABLE","comment":"","columns":[{"name":"id","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"name","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"description","type":"text","nullable":false,"default":null,"comment":""}],"indexes":[{"name":"PRIMARY","def":"PRIMARY KEY (id) USING BTREE","table":"kegg_pathways","columns":["id"],"comment":""}],"constraints":[{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (id)","table":"kegg_pathways","referenced_table":null,"columns":["id"],"referenced_columns":null,"comment":""}],"triggers":[],"def":"CREATE TABLE `kegg_pathways` (\n  `id` varchar(255) NOT NULL,\n  `name` varchar(255) NOT NULL,\n  `description` text NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"},{"name":"kegg_pathways_annotation","type":"BASE TABLE","comment":"","columns":[{"name":"kegg_pathway_id","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"transcript_id","type":"binary(16)","nullable":false,"default":null,"comment":""},{"name":"created_at","type":"datetime","nullable":true,"default":"CURRENT_TIMESTAMP","extra_def":"DEFAULT_GENERATED","comment":""},{"name":"updated_at","type":"datetime","nullable":true,"default":"CURRENT_TIMESTAMP","extra_def":"DEFAULT_GENERATED on update CURRENT_TIMESTAMP","comment":""}],"indexes":[{"name":"transcript_id","def":"KEY transcript_id (transcript_id) USING BTREE","table":"kegg_pathways_annotation","columns":["transcript_id"],"comment":""},{"name":"PRIMARY","def":"PRIMARY KEY (kegg_pathway_id, transcript_id) USING BTREE","table":"kegg_pathways_annotation","columns":["kegg_pathway_id","transcript_id"],"comment":""}],"constraints":[{"name":"kegg_pathways_annotation_ibfk_1","type":"FOREIGN KEY","def":"FOREIGN KEY (kegg_pathway_id) REFERENCES kegg_pathways (id)","table":"kegg_pathways_annotation","referenced_table":"kegg_pathways","columns":["kegg_pathway_id"],"referenced_columns":["id"],"comment":""},{"name":"kegg_pathways_annotation_ibfk_2","type":"FOREIGN KEY","def":"FOREIGN KEY (transcript_id) REFERENCES transcripts (id)","table":"kegg_pathways_annotation","referenced_table":"transcripts","columns":["transcript_id"],"referenced_columns":["id"],"comment":""},{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (kegg_pathway_id, transcript_id)","table":"kegg_pathways_annotation","referenced_table":null,"columns":["kegg_pathway_id","transcript_id"],"referenced_columns":null,"comment":""}],"triggers":[],"def":"CREATE TABLE `kegg_pathways_annotation` (\n  `kegg_pathway_id` varchar(255) NOT NULL,\n  `transcript_id` binary(16) NOT NULL,\n  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,\n  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  PRIMARY KEY (`kegg_pathway_id`,`transcript_id`),\n  KEY `transcript_id` (`transcript_id`),\n  CONSTRAINT `kegg_pathways_annotation_ibfk_1` FOREIGN KEY (`kegg_pathway_id`) REFERENCES `kegg_pathways` (`id`),\n  CONSTRAINT `kegg_pathways_annotation_ibfk_2` FOREIGN KEY (`transcript_id`) REFERENCES `transcripts` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"},{"name":"kegg_reaction","type":"BASE TABLE","comment":"","columns":[{"name":"id","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"name","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"description","type":"text","nullable":false,"default":null,"comment":""}],"indexes":[{"name":"PRIMARY","def":"PRIMARY KEY (id) USING BTREE","table":"kegg_reaction","columns":["id"],"comment":""}],"constraints":[{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (id)","table":"kegg_reaction","referenced_table":null,"columns":["id"],"referenced_columns":null,"comment":""}],"triggers":[],"def":"CREATE TABLE `kegg_reaction` (\n  `id` varchar(255) NOT NULL,\n  `name` varchar(255) NOT NULL,\n  `description` text NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"},{"name":"kegg_reaction_annotation","type":"BASE TABLE","comment":"","columns":[{"name":"kegg_reaction_id","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"transcript_id","type":"binary(16)","nullable":false,"default":null,"comment":""},{"name":"created_at","type":"datetime","nullable":true,"default":"CURRENT_TIMESTAMP","extra_def":"DEFAULT_GENERATED","comment":""},{"name":"updated_at","type":"datetime","nullable":true,"default":"CURRENT_TIMESTAMP","extra_def":"DEFAULT_GENERATED on update CURRENT_TIMESTAMP","comment":""}],"indexes":[{"name":"transcript_id","def":"KEY transcript_id (transcript_id) USING BTREE","table":"kegg_reaction_annotation","columns":["transcript_id"],"comment":""},{"name":"PRIMARY","def":"PRIMARY KEY (kegg_reaction_id, transcript_id) USING BTREE","table":"kegg_reaction_annotation","columns":["kegg_reaction_id","transcript_id"],"comment":""}],"constraints":[{"name":"kegg_reaction_annotation_ibfk_1","type":"FOREIGN KEY","def":"FOREIGN KEY (kegg_reaction_id) REFERENCES kegg_reaction (id)","table":"kegg_reaction_annotation","referenced_table":"kegg_reaction","columns":["kegg_reaction_id"],"referenced_columns":["id"],"comment":""},{"name":"kegg_reaction_annotation_ibfk_2","type":"FOREIGN KEY","def":"FOREIGN KEY (transcript_id) REFERENCES transcripts (id)","table":"kegg_reaction_annotation","referenced_table":"transcripts","columns":["transcript_id"],"referenced_columns":["id"],"comment":""},{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (kegg_reaction_id, transcript_id)","table":"kegg_reaction_annotation","referenced_table":null,"columns":["kegg_reaction_id","transcript_id"],"referenced_columns":null,"comment":""}],"triggers":[],"def":"CREATE TABLE `kegg_reaction_annotation` (\n  `kegg_reaction_id` varchar(255) NOT NULL,\n  `transcript_id` binary(16) NOT NULL,\n  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,\n  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  PRIMARY KEY (`kegg_reaction_id`,`transcript_id`),\n  KEY `transcript_id` (`transcript_id`),\n  CONSTRAINT `kegg_reaction_annotation_ibfk_1` FOREIGN KEY (`kegg_reaction_id`) REFERENCES `kegg_reaction` (`id`),\n  CONSTRAINT `kegg_reaction_annotation_ibfk_2` FOREIGN KEY (`transcript_id`) REFERENCES `transcripts` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"},{"name":"kog_annotations","type":"BASE TABLE","comment":"","columns":[{"name":"kog_id","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"transcript_id","type":"binary(16)","nullable":false,"default":null,"comment":""}],"indexes":[{"name":"transcript_id","def":"KEY transcript_id (transcript_id) USING BTREE","table":"kog_annotations","columns":["transcript_id"],"comment":""},{"name":"PRIMARY","def":"PRIMARY KEY (kog_id, transcript_id) USING BTREE","table":"kog_annotations","columns":["kog_id","transcript_id"],"comment":""}],"constraints":[{"name":"kog_annotations_ibfk_1","type":"FOREIGN KEY","def":"FOREIGN KEY (kog_id) REFERENCES kogs (id)","table":"kog_annotations","referenced_table":"kogs","columns":["kog_id"],"referenced_columns":["id"],"comment":""},{"name":"kog_annotations_ibfk_2","type":"FOREIGN KEY","def":"FOREIGN KEY (transcript_id) REFERENCES transcripts (id)","table":"kog_annotations","referenced_table":"transcripts","columns":["transcript_id"],"referenced_columns":["id"],"comment":""},{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (kog_id, transcript_id)","table":"kog_annotations","referenced_table":null,"columns":["kog_id","transcript_id"],"referenced_columns":null,"comment":""}],"triggers":[],"def":"CREATE TABLE `kog_annotations` (\n  `kog_id` varchar(255) NOT NULL,\n  `transcript_id` binary(16) NOT NULL,\n  PRIMARY KEY (`kog_id`,`transcript_id`),\n  KEY `transcript_id` (`transcript_id`),\n  CONSTRAINT `kog_annotations_ibfk_1` FOREIGN KEY (`kog_id`) REFERENCES `kogs` (`id`),\n  CONSTRAINT `kog_annotations_ibfk_2` FOREIGN KEY (`transcript_id`) REFERENCES `transcripts` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"},{"name":"kogs","type":"BASE TABLE","comment":"","columns":[{"name":"id","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"category","type":"enum('A','K','L','B','J','D','Y','V','T','M','N','Z','W','U','O','E','F','H','I','G','P','C','Q','R','S','X')","nullable":false,"default":null,"comment":""},{"name":"description","type":"text","nullable":false,"default":null,"comment":""}],"indexes":[{"name":"PRIMARY","def":"PRIMARY KEY (id) USING BTREE","table":"kogs","columns":["id"],"comment":""}],"constraints":[{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (id)","table":"kogs","referenced_table":null,"columns":["id"],"referenced_columns":null,"comment":""}],"triggers":[],"def":"CREATE TABLE `kogs` (\n  `id` varchar(255) NOT NULL,\n  `category` enum('A','K','L','B','J','D','Y','V','T','M','N','Z','W','U','O','E','F','H','I','G','P','C','Q','R','S','X') NOT NULL,\n  `description` text NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"},{"name":"organisms","type":"BASE TABLE","comment":"","columns":[{"name":"taxonomy_id","type":"int unsigned","nullable":false,"default":null,"comment":""},{"name":"name","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"codon_code","type":"int unsigned","nullable":false,"default":"1","comment":""}],"indexes":[{"name":"PRIMARY","def":"PRIMARY KEY (taxonomy_id) USING BTREE","table":"organisms","columns":["taxonomy_id"],"comment":""}],"constraints":[{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (taxonomy_id)","table":"organisms","referenced_table":null,"columns":["taxonomy_id"],"referenced_columns":null,"comment":""}],"triggers":[],"def":"CREATE TABLE `organisms` (\n  `taxonomy_id` int unsigned NOT NULL,\n  `name` varchar(255) NOT NULL,\n  `codon_code` int unsigned NOT NULL DEFAULT '1',\n  PRIMARY KEY (`taxonomy_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"},{"name":"transcript_structure","type":"BASE TABLE","comment":"","columns":[{"name":"transcript_id","type":"binary(16)","nullable":false,"default":null,"comment":""},{"name":"gff_record_id","type":"binary(16)","nullable":false,"default":null,"comment":""}],"indexes":[{"name":"gff_record_id","def":"KEY gff_record_id (gff_record_id) USING BTREE","table":"transcript_structure","columns":["gff_record_id"],"comment":""},{"name":"PRIMARY","def":"PRIMARY KEY (transcript_id, gff_record_id) USING BTREE","table":"transcript_structure","columns":["transcript_id","gff_record_id"],"comment":""}],"constraints":[{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (transcript_id, gff_record_id)","table":"transcript_structure","referenced_table":null,"columns":["transcript_id","gff_record_id"],"referenced_columns":null,"comment":""},{"name":"transcript_structure_ibfk_1","type":"FOREIGN KEY","def":"FOREIGN KEY (transcript_id) REFERENCES transcripts (id)","table":"transcript_structure","referenced_table":"transcripts","columns":["transcript_id"],"referenced_columns":["id"],"comment":""},{"name":"transcript_structure_ibfk_2","type":"FOREIGN KEY","def":"FOREIGN KEY (gff_record_id) REFERENCES gff_records (id)","table":"transcript_structure","referenced_table":"gff_records","columns":["gff_record_id"],"referenced_columns":["id"],"comment":""}],"triggers":[],"def":"CREATE TABLE `transcript_structure` (\n  `transcript_id` binary(16) NOT NULL,\n  `gff_record_id` binary(16) NOT NULL,\n  PRIMARY KEY (`transcript_id`,`gff_record_id`),\n  KEY `gff_record_id` (`gff_record_id`),\n  CONSTRAINT `transcript_structure_ibfk_1` FOREIGN KEY (`transcript_id`) REFERENCES `transcripts` (`id`),\n  CONSTRAINT `transcript_structure_ibfk_2` FOREIGN KEY (`gff_record_id`) REFERENCES `gff_records` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"},{"name":"transcripts","type":"BASE TABLE","comment":"","columns":[{"name":"id","type":"binary(16)","nullable":false,"default":"uuid_to_bin(uuid())","extra_def":"DEFAULT_GENERATED","comment":""},{"name":"transcript_id","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"gene_model_id","type":"binary(16)","nullable":false,"default":null,"comment":""},{"name":"gene_id","type":"binary(16)","nullable":false,"default":null,"comment":""},{"name":"transcript_type","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"start","type":"int","nullable":false,"default":null,"comment":""},{"name":"end","type":"int","nullable":false,"default":null,"comment":""},{"name":"strand","type":"char(1)","nullable":false,"default":null,"comment":""}],"indexes":[{"name":"gene_id","def":"KEY gene_id (gene_id) USING BTREE","table":"transcripts","columns":["gene_id"],"comment":""},{"name":"gene_model_id","def":"KEY gene_model_id (gene_model_id) USING BTREE","table":"transcripts","columns":["gene_model_id"],"comment":""},{"name":"PRIMARY","def":"PRIMARY KEY (id) USING BTREE","table":"transcripts","columns":["id"],"comment":""},{"name":"transcript_id","def":"UNIQUE KEY transcript_id (transcript_id, gene_model_id) USING BTREE","table":"transcripts","columns":["transcript_id","gene_model_id"],"comment":""}],"constraints":[{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (id)","table":"transcripts","referenced_table":null,"columns":["id"],"referenced_columns":null,"comment":""},{"name":"transcript_id","type":"UNIQUE","def":"UNIQUE KEY transcript_id (transcript_id, gene_model_id)","table":"transcripts","referenced_table":null,"columns":["transcript_id","gene_model_id"],"referenced_columns":null,"comment":""},{"name":"transcripts_ibfk_1","type":"FOREIGN KEY","def":"FOREIGN KEY (gene_model_id) REFERENCES gene_models (id)","table":"transcripts","referenced_table":"gene_models","columns":["gene_model_id"],"referenced_columns":["id"],"comment":""},{"name":"transcripts_ibfk_2","type":"FOREIGN KEY","def":"FOREIGN KEY (gene_id) REFERENCES genes (id)","table":"transcripts","referenced_table":"genes","columns":["gene_id"],"referenced_columns":["id"],"comment":""}],"triggers":[],"def":"CREATE TABLE `transcripts` (\n  `id` binary(16) NOT NULL DEFAULT (uuid_to_bin(uuid())),\n  `transcript_id` varchar(255) NOT NULL,\n  `gene_model_id` binary(16) NOT NULL,\n  `gene_id` binary(16) NOT NULL,\n  `transcript_type` varchar(255) NOT NULL,\n  `start` int NOT NULL,\n  `end` int NOT NULL,\n  `strand` char(1) NOT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `transcript_id` (`transcript_id`,`gene_model_id`),\n  KEY `gene_model_id` (`gene_model_id`),\n  KEY `gene_id` (`gene_id`),\n  CONSTRAINT `transcripts_ibfk_1` FOREIGN KEY (`gene_model_id`) REFERENCES `gene_models` (`id`),\n  CONSTRAINT `transcripts_ibfk_2` FOREIGN KEY (`gene_id`) REFERENCES `genes` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"},{"name":"users","type":"BASE TABLE","comment":"","columns":[{"name":"id","type":"binary(16)","nullable":false,"default":"uuid_to_bin(uuid())","extra_def":"DEFAULT_GENERATED","comment":""},{"name":"orc_id","type":"varchar(255)","nullable":false,"default":null,"comment":""},{"name":"email","type":"varchar(255)","nullable":false,"default":null,"comment":""}],"indexes":[{"name":"PRIMARY","def":"PRIMARY KEY (id) USING BTREE","table":"users","columns":["id"],"comment":""}],"constraints":[{"name":"PRIMARY","type":"PRIMARY KEY","def":"PRIMARY KEY (id)","table":"users","referenced_table":null,"columns":["id"],"referenced_columns":null,"comment":""}],"triggers":[],"def":"CREATE TABLE `users` (\n  `id` binary(16) NOT NULL DEFAULT (uuid_to_bin(uuid())),\n  `orc_id` varchar(255) NOT NULL,\n  `email` varchar(255) NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"}],"relations":[{"table":"annotation_models","columns":["genome_id"],"cardinality":"Zero or more","parent_table":"genomes","parent_columns":["id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (genome_id) REFERENCES genomes (id)","virtual":false},{"table":"domain_annotations","columns":["domain_id"],"cardinality":"Zero or more","parent_table":"domains","parent_columns":["id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (domain_id) REFERENCES domains (id)","virtual":false},{"table":"domain_annotations","columns":["transcript_id"],"cardinality":"Zero or more","parent_table":"transcripts","parent_columns":["id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (transcript_id) REFERENCES transcripts (id)","virtual":false},{"table":"gene_models","columns":["taxonomy_id"],"cardinality":"Zero or more","parent_table":"organisms","parent_columns":["taxonomy_id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (taxonomy_id) REFERENCES organisms (taxonomy_id)","virtual":false},{"table":"gene_models","columns":["genome_id"],"cardinality":"Zero or more","parent_table":"genomes","parent_columns":["id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (genome_id) REFERENCES genomes (id)","virtual":false},{"table":"gene_models","columns":["annotation_model_id"],"cardinality":"Zero or more","parent_table":"annotation_models","parent_columns":["id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (annotation_model_id) REFERENCES annotation_models (id)","virtual":false},{"table":"genes","columns":["gene_model_id"],"cardinality":"Zero or more","parent_table":"gene_models","parent_columns":["id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (gene_model_id) REFERENCES gene_models (id)","virtual":false},{"table":"genomes","columns":["organism_taxonomy_id"],"cardinality":"Zero or more","parent_table":"organisms","parent_columns":["taxonomy_id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (organism_taxonomy_id) REFERENCES organisms (taxonomy_id)","virtual":false},{"table":"gff_records","columns":["gene_model_id"],"cardinality":"Zero or more","parent_table":"gene_models","parent_columns":["id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (gene_model_id) REFERENCES gene_models (id)","virtual":false},{"table":"go_terms_annotation","columns":["go_term_id"],"cardinality":"Zero or more","parent_table":"go_terms","parent_columns":["id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (go_term_id) REFERENCES go_terms (id)","virtual":false},{"table":"go_terms_annotation","columns":["transcript_id"],"cardinality":"Zero or more","parent_table":"transcripts","parent_columns":["id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (transcript_id) REFERENCES transcripts (id)","virtual":false},{"table":"go_terms_annotation","columns":["assisgned_by"],"cardinality":"Zero or more","parent_table":"users","parent_columns":["id"],"parent_cardinality":"Zero or one","def":"FOREIGN KEY (assisgned_by) REFERENCES users (id)","virtual":false},{"table":"kegg_orthologies_annotation","columns":["kegg_orthology_id"],"cardinality":"Zero or more","parent_table":"kegg_orthologies","parent_columns":["id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (kegg_orthology_id) REFERENCES kegg_orthologies (id)","virtual":false},{"table":"kegg_orthologies_annotation","columns":["transcript_id"],"cardinality":"Zero or more","parent_table":"transcripts","parent_columns":["id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (transcript_id) REFERENCES transcripts (id)","virtual":false},{"table":"kegg_pathways_annotation","columns":["kegg_pathway_id"],"cardinality":"Zero or more","parent_table":"kegg_pathways","parent_columns":["id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (kegg_pathway_id) REFERENCES kegg_pathways (id)","virtual":false},{"table":"kegg_pathways_annotation","columns":["transcript_id"],"cardinality":"Zero or more","parent_table":"transcripts","parent_columns":["id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (transcript_id) REFERENCES transcripts (id)","virtual":false},{"table":"kegg_reaction_annotation","columns":["kegg_reaction_id"],"cardinality":"Zero or more","parent_table":"kegg_reaction","parent_columns":["id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (kegg_reaction_id) REFERENCES kegg_reaction (id)","virtual":false},{"table":"kegg_reaction_annotation","columns":["transcript_id"],"cardinality":"Zero or more","parent_table":"transcripts","parent_columns":["id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (transcript_id) REFERENCES transcripts (id)","virtual":false},{"table":"kog_annotations","columns":["kog_id"],"cardinality":"Zero or more","parent_table":"kogs","parent_columns":["id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (kog_id) REFERENCES kogs (id)","virtual":false},{"table":"kog_annotations","columns":["transcript_id"],"cardinality":"Zero or more","parent_table":"transcripts","parent_columns":["id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (transcript_id) REFERENCES transcripts (id)","virtual":false},{"table":"transcript_structure","columns":["transcript_id"],"cardinality":"Zero or more","parent_table":"transcripts","parent_columns":["id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (transcript_id) REFERENCES transcripts (id)","virtual":false},{"table":"transcript_structure","columns":["gff_record_id"],"cardinality":"Zero or more","parent_table":"gff_records","parent_columns":["id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (gff_record_id) REFERENCES gff_records (id)","virtual":false},{"table":"transcripts","columns":["gene_model_id"],"cardinality":"Zero or more","parent_table":"gene_models","parent_columns":["id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (gene_model_id) REFERENCES gene_models (id)","virtual":false},{"table":"transcripts","columns":["gene_id"],"cardinality":"Zero or more","parent_table":"genes","parent_columns":["id"],"parent_cardinality":"Exactly one","def":"FOREIGN KEY (gene_id) REFERENCES genes (id)","virtual":false}],"functions":[],"driver":{"name":"mysql","database_version":"8.0.32","meta":{"dict":{"Functions":"Stored procedures and functions"}}}}
+{
+  "name": "test",
+  "desc": "",
+  "tables": [
+    {
+      "name": "_sqlx_migrations",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        { "name": "version", "type": "bigint", "nullable": false, "default": null, "comment": "" },
+        { "name": "description", "type": "text", "nullable": false, "default": null, "comment": "" },
+        {
+          "name": "installed_on",
+          "type": "timestamp",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "extra_def": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        { "name": "success", "type": "tinyint(1)", "nullable": false, "default": null, "comment": "" },
+        { "name": "checksum", "type": "blob", "nullable": false, "default": null, "comment": "" },
+        { "name": "execution_time", "type": "bigint", "nullable": false, "default": null, "comment": "" }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (version) USING BTREE",
+          "table": "_sqlx_migrations",
+          "columns": ["version"],
+          "comment": ""
+        }
+      ],
+      "constraints": [
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (version)",
+          "table": "_sqlx_migrations",
+          "referenced_table": null,
+          "columns": ["version"],
+          "referenced_columns": null,
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `_sqlx_migrations` (\n  `version` bigint NOT NULL,\n  `description` text NOT NULL,\n  `installed_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  `success` tinyint(1) NOT NULL,\n  `checksum` blob NOT NULL,\n  `execution_time` bigint NOT NULL,\n  PRIMARY KEY (`version`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "annotation_models",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        {
+          "name": "id",
+          "type": "binary(16)",
+          "nullable": false,
+          "default": "uuid_to_bin(uuid())",
+          "extra_def": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        { "name": "version", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "genome_id", "type": "binary(16)", "nullable": false, "default": null, "comment": "" },
+        {
+          "name": "created_at",
+          "type": "datetime",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "extra_def": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "datetime",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "extra_def": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "genome_id",
+          "def": "KEY genome_id (genome_id) USING BTREE",
+          "table": "annotation_models",
+          "columns": ["genome_id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (id) USING BTREE",
+          "table": "annotation_models",
+          "columns": ["id"],
+          "comment": ""
+        }
+      ],
+      "constraints": [
+        {
+          "name": "annotation_models_ibfk_1",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (genome_id) REFERENCES genomes (id)",
+          "table": "annotation_models",
+          "referenced_table": "genomes",
+          "columns": ["genome_id"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "annotation_models",
+          "referenced_table": null,
+          "columns": ["id"],
+          "referenced_columns": null,
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `annotation_models` (\n  `id` binary(16) NOT NULL DEFAULT (uuid_to_bin(uuid())),\n  `version` varchar(255) NOT NULL,\n  `genome_id` binary(16) NOT NULL,\n  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,\n  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  PRIMARY KEY (`id`),\n  KEY `genome_id` (`genome_id`),\n  CONSTRAINT `annotation_models_ibfk_1` FOREIGN KEY (`genome_id`) REFERENCES `genomes` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "domain_annotations",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        { "name": "domain_id", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "transcript_id", "type": "binary(16)", "nullable": false, "default": null, "comment": "" },
+        { "name": "start", "type": "int", "nullable": false, "default": null, "comment": "" },
+        { "name": "end", "type": "int", "nullable": false, "default": null, "comment": "" }
+      ],
+      "indexes": [
+        {
+          "name": "transcript_id",
+          "def": "KEY transcript_id (transcript_id) USING BTREE",
+          "table": "domain_annotations",
+          "columns": ["transcript_id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (domain_id, transcript_id) USING BTREE",
+          "table": "domain_annotations",
+          "columns": ["domain_id", "transcript_id"],
+          "comment": ""
+        }
+      ],
+      "constraints": [
+        {
+          "name": "domain_annotations_ibfk_1",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (domain_id) REFERENCES domains (id)",
+          "table": "domain_annotations",
+          "referenced_table": "domains",
+          "columns": ["domain_id"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "domain_annotations_ibfk_2",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (transcript_id) REFERENCES transcripts (id)",
+          "table": "domain_annotations",
+          "referenced_table": "transcripts",
+          "columns": ["transcript_id"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (domain_id, transcript_id)",
+          "table": "domain_annotations",
+          "referenced_table": null,
+          "columns": ["domain_id", "transcript_id"],
+          "referenced_columns": null,
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `domain_annotations` (\n  `domain_id` varchar(255) NOT NULL,\n  `transcript_id` binary(16) NOT NULL,\n  `start` int NOT NULL,\n  `end` int NOT NULL,\n  PRIMARY KEY (`domain_id`,`transcript_id`),\n  KEY `transcript_id` (`transcript_id`),\n  CONSTRAINT `domain_annotations_ibfk_1` FOREIGN KEY (`domain_id`) REFERENCES `domains` (`id`),\n  CONSTRAINT `domain_annotations_ibfk_2` FOREIGN KEY (`transcript_id`) REFERENCES `transcripts` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "domains",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        { "name": "id", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "name", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "description", "type": "text", "nullable": false, "default": null, "comment": "" }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (id) USING BTREE",
+          "table": "domains",
+          "columns": ["id"],
+          "comment": ""
+        }
+      ],
+      "constraints": [
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "domains",
+          "referenced_table": null,
+          "columns": ["id"],
+          "referenced_columns": null,
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `domains` (\n  `id` varchar(255) NOT NULL,\n  `name` varchar(255) NOT NULL,\n  `description` text NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "gene_models",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        {
+          "name": "id",
+          "type": "binary(16)",
+          "nullable": false,
+          "default": "uuid_to_bin(uuid())",
+          "extra_def": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        { "name": "taxonomy_id", "type": "int unsigned", "nullable": false, "default": null, "comment": "" },
+        { "name": "genome_id", "type": "binary(16)", "nullable": false, "default": null, "comment": "" },
+        { "name": "annotation_model_id", "type": "binary(16)", "nullable": false, "default": null, "comment": "" }
+      ],
+      "indexes": [
+        {
+          "name": "annotation_model_id",
+          "def": "KEY annotation_model_id (annotation_model_id) USING BTREE",
+          "table": "gene_models",
+          "columns": ["annotation_model_id"],
+          "comment": ""
+        },
+        {
+          "name": "genome_id",
+          "def": "KEY genome_id (genome_id) USING BTREE",
+          "table": "gene_models",
+          "columns": ["genome_id"],
+          "comment": ""
+        },
+        {
+          "name": "taxonomy_id",
+          "def": "KEY taxonomy_id (taxonomy_id) USING BTREE",
+          "table": "gene_models",
+          "columns": ["taxonomy_id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (id) USING BTREE",
+          "table": "gene_models",
+          "columns": ["id"],
+          "comment": ""
+        }
+      ],
+      "constraints": [
+        {
+          "name": "gene_models_ibfk_1",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (taxonomy_id) REFERENCES organisms (taxonomy_id)",
+          "table": "gene_models",
+          "referenced_table": "organisms",
+          "columns": ["taxonomy_id"],
+          "referenced_columns": ["taxonomy_id"],
+          "comment": ""
+        },
+        {
+          "name": "gene_models_ibfk_2",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (genome_id) REFERENCES genomes (id)",
+          "table": "gene_models",
+          "referenced_table": "genomes",
+          "columns": ["genome_id"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "gene_models_ibfk_3",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (annotation_model_id) REFERENCES annotation_models (id)",
+          "table": "gene_models",
+          "referenced_table": "annotation_models",
+          "columns": ["annotation_model_id"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "gene_models",
+          "referenced_table": null,
+          "columns": ["id"],
+          "referenced_columns": null,
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `gene_models` (\n  `id` binary(16) NOT NULL DEFAULT (uuid_to_bin(uuid())),\n  `taxonomy_id` int unsigned NOT NULL,\n  `genome_id` binary(16) NOT NULL,\n  `annotation_model_id` binary(16) NOT NULL,\n  PRIMARY KEY (`id`),\n  KEY `taxonomy_id` (`taxonomy_id`),\n  KEY `genome_id` (`genome_id`),\n  KEY `annotation_model_id` (`annotation_model_id`),\n  CONSTRAINT `gene_models_ibfk_1` FOREIGN KEY (`taxonomy_id`) REFERENCES `organisms` (`taxonomy_id`),\n  CONSTRAINT `gene_models_ibfk_2` FOREIGN KEY (`genome_id`) REFERENCES `genomes` (`id`),\n  CONSTRAINT `gene_models_ibfk_3` FOREIGN KEY (`annotation_model_id`) REFERENCES `annotation_models` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "genes",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        {
+          "name": "id",
+          "type": "binary(16)",
+          "nullable": false,
+          "default": "uuid_to_bin(uuid())",
+          "extra_def": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        { "name": "gene_id", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "gene_model_id", "type": "binary(16)", "nullable": false, "default": null, "comment": "" }
+      ],
+      "indexes": [
+        {
+          "name": "gene_model_id",
+          "def": "KEY gene_model_id (gene_model_id) USING BTREE",
+          "table": "genes",
+          "columns": ["gene_model_id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (id) USING BTREE",
+          "table": "genes",
+          "columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "gene_id",
+          "def": "UNIQUE KEY gene_id (gene_id, gene_model_id) USING BTREE",
+          "table": "genes",
+          "columns": ["gene_id", "gene_model_id"],
+          "comment": ""
+        }
+      ],
+      "constraints": [
+        {
+          "name": "gene_id",
+          "type": "UNIQUE",
+          "def": "UNIQUE KEY gene_id (gene_id, gene_model_id)",
+          "table": "genes",
+          "referenced_table": null,
+          "columns": ["gene_id", "gene_model_id"],
+          "referenced_columns": null,
+          "comment": ""
+        },
+        {
+          "name": "genes_ibfk_1",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (gene_model_id) REFERENCES gene_models (id)",
+          "table": "genes",
+          "referenced_table": "gene_models",
+          "columns": ["gene_model_id"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "genes",
+          "referenced_table": null,
+          "columns": ["id"],
+          "referenced_columns": null,
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `genes` (\n  `id` binary(16) NOT NULL DEFAULT (uuid_to_bin(uuid())),\n  `gene_id` varchar(255) NOT NULL,\n  `gene_model_id` binary(16) NOT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `gene_id` (`gene_id`,`gene_model_id`),\n  KEY `gene_model_id` (`gene_model_id`),\n  CONSTRAINT `genes_ibfk_1` FOREIGN KEY (`gene_model_id`) REFERENCES `gene_models` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "genomes",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        {
+          "name": "id",
+          "type": "binary(16)",
+          "nullable": false,
+          "default": "uuid_to_bin(uuid())",
+          "extra_def": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        { "name": "genome_version", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "organism_taxonomy_id", "type": "int unsigned", "nullable": false, "default": null, "comment": "" },
+        {
+          "name": "created_at",
+          "type": "datetime",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "extra_def": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "datetime",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "extra_def": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "organism_taxonomy_id",
+          "def": "KEY organism_taxonomy_id (organism_taxonomy_id) USING BTREE",
+          "table": "genomes",
+          "columns": ["organism_taxonomy_id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (id) USING BTREE",
+          "table": "genomes",
+          "columns": ["id"],
+          "comment": ""
+        }
+      ],
+      "constraints": [
+        {
+          "name": "genomes_ibfk_1",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (organism_taxonomy_id) REFERENCES organisms (taxonomy_id)",
+          "table": "genomes",
+          "referenced_table": "organisms",
+          "columns": ["organism_taxonomy_id"],
+          "referenced_columns": ["taxonomy_id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "genomes",
+          "referenced_table": null,
+          "columns": ["id"],
+          "referenced_columns": null,
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `genomes` (\n  `id` binary(16) NOT NULL DEFAULT (uuid_to_bin(uuid())),\n  `genome_version` varchar(255) NOT NULL,\n  `organism_taxonomy_id` int unsigned NOT NULL,\n  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,\n  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  PRIMARY KEY (`id`),\n  KEY `organism_taxonomy_id` (`organism_taxonomy_id`),\n  CONSTRAINT `genomes_ibfk_1` FOREIGN KEY (`organism_taxonomy_id`) REFERENCES `organisms` (`taxonomy_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "gff_records",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        {
+          "name": "id",
+          "type": "binary(16)",
+          "nullable": false,
+          "default": "uuid_to_bin(uuid())",
+          "extra_def": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        { "name": "gene_model_id", "type": "binary(16)", "nullable": false, "default": null, "comment": "" },
+        { "name": "seqname", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "source", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "type", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "start", "type": "int", "nullable": false, "default": null, "comment": "" },
+        { "name": "end", "type": "int", "nullable": false, "default": null, "comment": "" },
+        { "name": "score", "type": "float", "nullable": false, "default": null, "comment": "" },
+        { "name": "strand", "type": "char(1)", "nullable": false, "default": null, "comment": "" },
+        { "name": "phase", "type": "char(1)", "nullable": false, "default": null, "comment": "" },
+        { "name": "attributes", "type": "json", "nullable": false, "default": null, "comment": "" }
+      ],
+      "indexes": [
+        {
+          "name": "gene_model_id",
+          "def": "KEY gene_model_id (gene_model_id) USING BTREE",
+          "table": "gff_records",
+          "columns": ["gene_model_id"],
+          "comment": ""
+        },
+        {
+          "name": "idx_gff_records_seqname_start_end",
+          "def": "KEY idx_gff_records_seqname_start_end (seqname, start, end) USING BTREE",
+          "table": "gff_records",
+          "columns": ["seqname", "start", "end"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (id) USING BTREE",
+          "table": "gff_records",
+          "columns": ["id"],
+          "comment": ""
+        }
+      ],
+      "constraints": [
+        {
+          "name": "gff_records_ibfk_1",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (gene_model_id) REFERENCES gene_models (id)",
+          "table": "gff_records",
+          "referenced_table": "gene_models",
+          "columns": ["gene_model_id"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "gff_records",
+          "referenced_table": null,
+          "columns": ["id"],
+          "referenced_columns": null,
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `gff_records` (\n  `id` binary(16) NOT NULL DEFAULT (uuid_to_bin(uuid())),\n  `gene_model_id` binary(16) NOT NULL,\n  `seqname` varchar(255) NOT NULL,\n  `source` varchar(255) NOT NULL,\n  `type` varchar(255) NOT NULL,\n  `start` int NOT NULL,\n  `end` int NOT NULL,\n  `score` float NOT NULL,\n  `strand` char(1) NOT NULL,\n  `phase` char(1) NOT NULL,\n  `attributes` json NOT NULL,\n  PRIMARY KEY (`id`),\n  KEY `gene_model_id` (`gene_model_id`),\n  KEY `idx_gff_records_seqname_start_end` (`seqname`,`start`,`end`),\n  CONSTRAINT `gff_records_ibfk_1` FOREIGN KEY (`gene_model_id`) REFERENCES `gene_models` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "go_terms",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        { "name": "id", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "name", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "namespace", "type": "enum('BP','CC','MF')", "nullable": false, "default": null, "comment": "" },
+        { "name": "definition", "type": "text", "nullable": false, "default": null, "comment": "" }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (id) USING BTREE",
+          "table": "go_terms",
+          "columns": ["id"],
+          "comment": ""
+        }
+      ],
+      "constraints": [
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "go_terms",
+          "referenced_table": null,
+          "columns": ["id"],
+          "referenced_columns": null,
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `go_terms` (\n  `id` varchar(255) NOT NULL,\n  `name` varchar(255) NOT NULL,\n  `namespace` enum('BP','CC','MF') NOT NULL,\n  `definition` text NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "go_terms_annotation",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        { "name": "go_term_id", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "transcript_id", "type": "binary(16)", "nullable": false, "default": null, "comment": "" },
+        { "name": "evidence_code", "type": "char(3)", "nullable": false, "default": null, "comment": "" },
+        {
+          "name": "created_at",
+          "type": "datetime",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "extra_def": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "datetime",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "extra_def": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP",
+          "comment": ""
+        },
+        { "name": "assisgned_by", "type": "binary(16)", "nullable": true, "default": null, "comment": "" }
+      ],
+      "indexes": [
+        {
+          "name": "assisgned_by",
+          "def": "KEY assisgned_by (assisgned_by) USING BTREE",
+          "table": "go_terms_annotation",
+          "columns": ["assisgned_by"],
+          "comment": ""
+        },
+        {
+          "name": "transcript_id",
+          "def": "KEY transcript_id (transcript_id) USING BTREE",
+          "table": "go_terms_annotation",
+          "columns": ["transcript_id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (go_term_id, transcript_id) USING BTREE",
+          "table": "go_terms_annotation",
+          "columns": ["go_term_id", "transcript_id"],
+          "comment": ""
+        }
+      ],
+      "constraints": [
+        {
+          "name": "go_terms_annotation_ibfk_1",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (go_term_id) REFERENCES go_terms (id)",
+          "table": "go_terms_annotation",
+          "referenced_table": "go_terms",
+          "columns": ["go_term_id"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "go_terms_annotation_ibfk_2",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (transcript_id) REFERENCES transcripts (id)",
+          "table": "go_terms_annotation",
+          "referenced_table": "transcripts",
+          "columns": ["transcript_id"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "go_terms_annotation_ibfk_3",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (assisgned_by) REFERENCES users (id)",
+          "table": "go_terms_annotation",
+          "referenced_table": "users",
+          "columns": ["assisgned_by"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (go_term_id, transcript_id)",
+          "table": "go_terms_annotation",
+          "referenced_table": null,
+          "columns": ["go_term_id", "transcript_id"],
+          "referenced_columns": null,
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `go_terms_annotation` (\n  `go_term_id` varchar(255) NOT NULL,\n  `transcript_id` binary(16) NOT NULL,\n  `evidence_code` char(3) NOT NULL,\n  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,\n  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  `assisgned_by` binary(16) DEFAULT NULL,\n  PRIMARY KEY (`go_term_id`,`transcript_id`),\n  KEY `transcript_id` (`transcript_id`),\n  KEY `assisgned_by` (`assisgned_by`),\n  CONSTRAINT `go_terms_annotation_ibfk_1` FOREIGN KEY (`go_term_id`) REFERENCES `go_terms` (`id`),\n  CONSTRAINT `go_terms_annotation_ibfk_2` FOREIGN KEY (`transcript_id`) REFERENCES `transcripts` (`id`),\n  CONSTRAINT `go_terms_annotation_ibfk_3` FOREIGN KEY (`assisgned_by`) REFERENCES `users` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "kegg_orthologies",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        { "name": "id", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "name", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "description", "type": "text", "nullable": false, "default": null, "comment": "" }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (id) USING BTREE",
+          "table": "kegg_orthologies",
+          "columns": ["id"],
+          "comment": ""
+        }
+      ],
+      "constraints": [
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "kegg_orthologies",
+          "referenced_table": null,
+          "columns": ["id"],
+          "referenced_columns": null,
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `kegg_orthologies` (\n  `id` varchar(255) NOT NULL,\n  `name` varchar(255) NOT NULL,\n  `description` text NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "kegg_orthologies_annotation",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        { "name": "kegg_orthology_id", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "transcript_id", "type": "binary(16)", "nullable": false, "default": null, "comment": "" },
+        {
+          "name": "created_at",
+          "type": "datetime",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "extra_def": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "datetime",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "extra_def": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "transcript_id",
+          "def": "KEY transcript_id (transcript_id) USING BTREE",
+          "table": "kegg_orthologies_annotation",
+          "columns": ["transcript_id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (kegg_orthology_id, transcript_id) USING BTREE",
+          "table": "kegg_orthologies_annotation",
+          "columns": ["kegg_orthology_id", "transcript_id"],
+          "comment": ""
+        }
+      ],
+      "constraints": [
+        {
+          "name": "kegg_orthologies_annotation_ibfk_1",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (kegg_orthology_id) REFERENCES kegg_orthologies (id)",
+          "table": "kegg_orthologies_annotation",
+          "referenced_table": "kegg_orthologies",
+          "columns": ["kegg_orthology_id"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "kegg_orthologies_annotation_ibfk_2",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (transcript_id) REFERENCES transcripts (id)",
+          "table": "kegg_orthologies_annotation",
+          "referenced_table": "transcripts",
+          "columns": ["transcript_id"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (kegg_orthology_id, transcript_id)",
+          "table": "kegg_orthologies_annotation",
+          "referenced_table": null,
+          "columns": ["kegg_orthology_id", "transcript_id"],
+          "referenced_columns": null,
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `kegg_orthologies_annotation` (\n  `kegg_orthology_id` varchar(255) NOT NULL,\n  `transcript_id` binary(16) NOT NULL,\n  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,\n  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  PRIMARY KEY (`kegg_orthology_id`,`transcript_id`),\n  KEY `transcript_id` (`transcript_id`),\n  CONSTRAINT `kegg_orthologies_annotation_ibfk_1` FOREIGN KEY (`kegg_orthology_id`) REFERENCES `kegg_orthologies` (`id`),\n  CONSTRAINT `kegg_orthologies_annotation_ibfk_2` FOREIGN KEY (`transcript_id`) REFERENCES `transcripts` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "kegg_pathways",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        { "name": "id", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "name", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "description", "type": "text", "nullable": false, "default": null, "comment": "" }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (id) USING BTREE",
+          "table": "kegg_pathways",
+          "columns": ["id"],
+          "comment": ""
+        }
+      ],
+      "constraints": [
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "kegg_pathways",
+          "referenced_table": null,
+          "columns": ["id"],
+          "referenced_columns": null,
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `kegg_pathways` (\n  `id` varchar(255) NOT NULL,\n  `name` varchar(255) NOT NULL,\n  `description` text NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "kegg_pathways_annotation",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        { "name": "kegg_pathway_id", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "transcript_id", "type": "binary(16)", "nullable": false, "default": null, "comment": "" },
+        {
+          "name": "created_at",
+          "type": "datetime",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "extra_def": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "datetime",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "extra_def": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "transcript_id",
+          "def": "KEY transcript_id (transcript_id) USING BTREE",
+          "table": "kegg_pathways_annotation",
+          "columns": ["transcript_id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (kegg_pathway_id, transcript_id) USING BTREE",
+          "table": "kegg_pathways_annotation",
+          "columns": ["kegg_pathway_id", "transcript_id"],
+          "comment": ""
+        }
+      ],
+      "constraints": [
+        {
+          "name": "kegg_pathways_annotation_ibfk_1",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (kegg_pathway_id) REFERENCES kegg_pathways (id)",
+          "table": "kegg_pathways_annotation",
+          "referenced_table": "kegg_pathways",
+          "columns": ["kegg_pathway_id"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "kegg_pathways_annotation_ibfk_2",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (transcript_id) REFERENCES transcripts (id)",
+          "table": "kegg_pathways_annotation",
+          "referenced_table": "transcripts",
+          "columns": ["transcript_id"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (kegg_pathway_id, transcript_id)",
+          "table": "kegg_pathways_annotation",
+          "referenced_table": null,
+          "columns": ["kegg_pathway_id", "transcript_id"],
+          "referenced_columns": null,
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `kegg_pathways_annotation` (\n  `kegg_pathway_id` varchar(255) NOT NULL,\n  `transcript_id` binary(16) NOT NULL,\n  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,\n  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  PRIMARY KEY (`kegg_pathway_id`,`transcript_id`),\n  KEY `transcript_id` (`transcript_id`),\n  CONSTRAINT `kegg_pathways_annotation_ibfk_1` FOREIGN KEY (`kegg_pathway_id`) REFERENCES `kegg_pathways` (`id`),\n  CONSTRAINT `kegg_pathways_annotation_ibfk_2` FOREIGN KEY (`transcript_id`) REFERENCES `transcripts` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "kegg_reaction",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        { "name": "id", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "name", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "description", "type": "text", "nullable": false, "default": null, "comment": "" }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (id) USING BTREE",
+          "table": "kegg_reaction",
+          "columns": ["id"],
+          "comment": ""
+        }
+      ],
+      "constraints": [
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "kegg_reaction",
+          "referenced_table": null,
+          "columns": ["id"],
+          "referenced_columns": null,
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `kegg_reaction` (\n  `id` varchar(255) NOT NULL,\n  `name` varchar(255) NOT NULL,\n  `description` text NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "kegg_reaction_annotation",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        { "name": "kegg_reaction_id", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "transcript_id", "type": "binary(16)", "nullable": false, "default": null, "comment": "" },
+        {
+          "name": "created_at",
+          "type": "datetime",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "extra_def": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "datetime",
+          "nullable": true,
+          "default": "CURRENT_TIMESTAMP",
+          "extra_def": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP",
+          "comment": ""
+        }
+      ],
+      "indexes": [
+        {
+          "name": "transcript_id",
+          "def": "KEY transcript_id (transcript_id) USING BTREE",
+          "table": "kegg_reaction_annotation",
+          "columns": ["transcript_id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (kegg_reaction_id, transcript_id) USING BTREE",
+          "table": "kegg_reaction_annotation",
+          "columns": ["kegg_reaction_id", "transcript_id"],
+          "comment": ""
+        }
+      ],
+      "constraints": [
+        {
+          "name": "kegg_reaction_annotation_ibfk_1",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (kegg_reaction_id) REFERENCES kegg_reaction (id)",
+          "table": "kegg_reaction_annotation",
+          "referenced_table": "kegg_reaction",
+          "columns": ["kegg_reaction_id"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "kegg_reaction_annotation_ibfk_2",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (transcript_id) REFERENCES transcripts (id)",
+          "table": "kegg_reaction_annotation",
+          "referenced_table": "transcripts",
+          "columns": ["transcript_id"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (kegg_reaction_id, transcript_id)",
+          "table": "kegg_reaction_annotation",
+          "referenced_table": null,
+          "columns": ["kegg_reaction_id", "transcript_id"],
+          "referenced_columns": null,
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `kegg_reaction_annotation` (\n  `kegg_reaction_id` varchar(255) NOT NULL,\n  `transcript_id` binary(16) NOT NULL,\n  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,\n  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n  PRIMARY KEY (`kegg_reaction_id`,`transcript_id`),\n  KEY `transcript_id` (`transcript_id`),\n  CONSTRAINT `kegg_reaction_annotation_ibfk_1` FOREIGN KEY (`kegg_reaction_id`) REFERENCES `kegg_reaction` (`id`),\n  CONSTRAINT `kegg_reaction_annotation_ibfk_2` FOREIGN KEY (`transcript_id`) REFERENCES `transcripts` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "kog_annotations",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        { "name": "kog_id", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "transcript_id", "type": "binary(16)", "nullable": false, "default": null, "comment": "" }
+      ],
+      "indexes": [
+        {
+          "name": "transcript_id",
+          "def": "KEY transcript_id (transcript_id) USING BTREE",
+          "table": "kog_annotations",
+          "columns": ["transcript_id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (kog_id, transcript_id) USING BTREE",
+          "table": "kog_annotations",
+          "columns": ["kog_id", "transcript_id"],
+          "comment": ""
+        }
+      ],
+      "constraints": [
+        {
+          "name": "kog_annotations_ibfk_1",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (kog_id) REFERENCES kogs (id)",
+          "table": "kog_annotations",
+          "referenced_table": "kogs",
+          "columns": ["kog_id"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "kog_annotations_ibfk_2",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (transcript_id) REFERENCES transcripts (id)",
+          "table": "kog_annotations",
+          "referenced_table": "transcripts",
+          "columns": ["transcript_id"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (kog_id, transcript_id)",
+          "table": "kog_annotations",
+          "referenced_table": null,
+          "columns": ["kog_id", "transcript_id"],
+          "referenced_columns": null,
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `kog_annotations` (\n  `kog_id` varchar(255) NOT NULL,\n  `transcript_id` binary(16) NOT NULL,\n  PRIMARY KEY (`kog_id`,`transcript_id`),\n  KEY `transcript_id` (`transcript_id`),\n  CONSTRAINT `kog_annotations_ibfk_1` FOREIGN KEY (`kog_id`) REFERENCES `kogs` (`id`),\n  CONSTRAINT `kog_annotations_ibfk_2` FOREIGN KEY (`transcript_id`) REFERENCES `transcripts` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "kogs",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        { "name": "id", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        {
+          "name": "category",
+          "type": "enum('A','K','L','B','J','D','Y','V','T','M','N','Z','W','U','O','E','F','H','I','G','P','C','Q','R','S','X')",
+          "nullable": false,
+          "default": null,
+          "comment": ""
+        },
+        { "name": "description", "type": "text", "nullable": false, "default": null, "comment": "" }
+      ],
+      "indexes": [
+        { "name": "PRIMARY", "def": "PRIMARY KEY (id) USING BTREE", "table": "kogs", "columns": ["id"], "comment": "" }
+      ],
+      "constraints": [
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "kogs",
+          "referenced_table": null,
+          "columns": ["id"],
+          "referenced_columns": null,
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `kogs` (\n  `id` varchar(255) NOT NULL,\n  `category` enum('A','K','L','B','J','D','Y','V','T','M','N','Z','W','U','O','E','F','H','I','G','P','C','Q','R','S','X') NOT NULL,\n  `description` text NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "organisms",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        { "name": "taxonomy_id", "type": "int unsigned", "nullable": false, "default": null, "comment": "" },
+        { "name": "name", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "codon_code", "type": "int unsigned", "nullable": false, "default": "1", "comment": "" }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (taxonomy_id) USING BTREE",
+          "table": "organisms",
+          "columns": ["taxonomy_id"],
+          "comment": ""
+        }
+      ],
+      "constraints": [
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (taxonomy_id)",
+          "table": "organisms",
+          "referenced_table": null,
+          "columns": ["taxonomy_id"],
+          "referenced_columns": null,
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `organisms` (\n  `taxonomy_id` int unsigned NOT NULL,\n  `name` varchar(255) NOT NULL,\n  `codon_code` int unsigned NOT NULL DEFAULT '1',\n  PRIMARY KEY (`taxonomy_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "transcript_structure",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        { "name": "transcript_id", "type": "binary(16)", "nullable": false, "default": null, "comment": "" },
+        { "name": "gff_record_id", "type": "binary(16)", "nullable": false, "default": null, "comment": "" }
+      ],
+      "indexes": [
+        {
+          "name": "gff_record_id",
+          "def": "KEY gff_record_id (gff_record_id) USING BTREE",
+          "table": "transcript_structure",
+          "columns": ["gff_record_id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (transcript_id, gff_record_id) USING BTREE",
+          "table": "transcript_structure",
+          "columns": ["transcript_id", "gff_record_id"],
+          "comment": ""
+        }
+      ],
+      "constraints": [
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (transcript_id, gff_record_id)",
+          "table": "transcript_structure",
+          "referenced_table": null,
+          "columns": ["transcript_id", "gff_record_id"],
+          "referenced_columns": null,
+          "comment": ""
+        },
+        {
+          "name": "transcript_structure_ibfk_1",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (transcript_id) REFERENCES transcripts (id)",
+          "table": "transcript_structure",
+          "referenced_table": "transcripts",
+          "columns": ["transcript_id"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "transcript_structure_ibfk_2",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (gff_record_id) REFERENCES gff_records (id)",
+          "table": "transcript_structure",
+          "referenced_table": "gff_records",
+          "columns": ["gff_record_id"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `transcript_structure` (\n  `transcript_id` binary(16) NOT NULL,\n  `gff_record_id` binary(16) NOT NULL,\n  PRIMARY KEY (`transcript_id`,`gff_record_id`),\n  KEY `gff_record_id` (`gff_record_id`),\n  CONSTRAINT `transcript_structure_ibfk_1` FOREIGN KEY (`transcript_id`) REFERENCES `transcripts` (`id`),\n  CONSTRAINT `transcript_structure_ibfk_2` FOREIGN KEY (`gff_record_id`) REFERENCES `gff_records` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "transcripts",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        {
+          "name": "id",
+          "type": "binary(16)",
+          "nullable": false,
+          "default": "uuid_to_bin(uuid())",
+          "extra_def": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        { "name": "transcript_id", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "gene_model_id", "type": "binary(16)", "nullable": false, "default": null, "comment": "" },
+        { "name": "gene_id", "type": "binary(16)", "nullable": false, "default": null, "comment": "" },
+        { "name": "transcript_type", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "start", "type": "int", "nullable": false, "default": null, "comment": "" },
+        { "name": "end", "type": "int", "nullable": false, "default": null, "comment": "" },
+        { "name": "strand", "type": "char(1)", "nullable": false, "default": null, "comment": "" }
+      ],
+      "indexes": [
+        {
+          "name": "gene_id",
+          "def": "KEY gene_id (gene_id) USING BTREE",
+          "table": "transcripts",
+          "columns": ["gene_id"],
+          "comment": ""
+        },
+        {
+          "name": "gene_model_id",
+          "def": "KEY gene_model_id (gene_model_id) USING BTREE",
+          "table": "transcripts",
+          "columns": ["gene_model_id"],
+          "comment": ""
+        },
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (id) USING BTREE",
+          "table": "transcripts",
+          "columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "transcript_id",
+          "def": "UNIQUE KEY transcript_id (transcript_id, gene_model_id) USING BTREE",
+          "table": "transcripts",
+          "columns": ["transcript_id", "gene_model_id"],
+          "comment": ""
+        }
+      ],
+      "constraints": [
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "transcripts",
+          "referenced_table": null,
+          "columns": ["id"],
+          "referenced_columns": null,
+          "comment": ""
+        },
+        {
+          "name": "transcript_id",
+          "type": "UNIQUE",
+          "def": "UNIQUE KEY transcript_id (transcript_id, gene_model_id)",
+          "table": "transcripts",
+          "referenced_table": null,
+          "columns": ["transcript_id", "gene_model_id"],
+          "referenced_columns": null,
+          "comment": ""
+        },
+        {
+          "name": "transcripts_ibfk_1",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (gene_model_id) REFERENCES gene_models (id)",
+          "table": "transcripts",
+          "referenced_table": "gene_models",
+          "columns": ["gene_model_id"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        },
+        {
+          "name": "transcripts_ibfk_2",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (gene_id) REFERENCES genes (id)",
+          "table": "transcripts",
+          "referenced_table": "genes",
+          "columns": ["gene_id"],
+          "referenced_columns": ["id"],
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `transcripts` (\n  `id` binary(16) NOT NULL DEFAULT (uuid_to_bin(uuid())),\n  `transcript_id` varchar(255) NOT NULL,\n  `gene_model_id` binary(16) NOT NULL,\n  `gene_id` binary(16) NOT NULL,\n  `transcript_type` varchar(255) NOT NULL,\n  `start` int NOT NULL,\n  `end` int NOT NULL,\n  `strand` char(1) NOT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `transcript_id` (`transcript_id`,`gene_model_id`),\n  KEY `gene_model_id` (`gene_model_id`),\n  KEY `gene_id` (`gene_id`),\n  CONSTRAINT `transcripts_ibfk_1` FOREIGN KEY (`gene_model_id`) REFERENCES `gene_models` (`id`),\n  CONSTRAINT `transcripts_ibfk_2` FOREIGN KEY (`gene_id`) REFERENCES `genes` (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    },
+    {
+      "name": "users",
+      "type": "BASE TABLE",
+      "comment": "",
+      "columns": [
+        {
+          "name": "id",
+          "type": "binary(16)",
+          "nullable": false,
+          "default": "uuid_to_bin(uuid())",
+          "extra_def": "DEFAULT_GENERATED",
+          "comment": ""
+        },
+        { "name": "orc_id", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" },
+        { "name": "email", "type": "varchar(255)", "nullable": false, "default": null, "comment": "" }
+      ],
+      "indexes": [
+        { "name": "PRIMARY", "def": "PRIMARY KEY (id) USING BTREE", "table": "users", "columns": ["id"], "comment": "" }
+      ],
+      "constraints": [
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "users",
+          "referenced_table": null,
+          "columns": ["id"],
+          "referenced_columns": null,
+          "comment": ""
+        }
+      ],
+      "triggers": [],
+      "def": "CREATE TABLE `users` (\n  `id` binary(16) NOT NULL DEFAULT (uuid_to_bin(uuid())),\n  `orc_id` varchar(255) NOT NULL,\n  `email` varchar(255) NOT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci"
+    }
+  ],
+  "relations": [
+    {
+      "table": "annotation_models",
+      "columns": ["genome_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "genomes",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (genome_id) REFERENCES genomes (id)",
+      "virtual": false
+    },
+    {
+      "table": "domain_annotations",
+      "columns": ["domain_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "domains",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (domain_id) REFERENCES domains (id)",
+      "virtual": false
+    },
+    {
+      "table": "domain_annotations",
+      "columns": ["transcript_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "transcripts",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (transcript_id) REFERENCES transcripts (id)",
+      "virtual": false
+    },
+    {
+      "table": "gene_models",
+      "columns": ["taxonomy_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "organisms",
+      "parent_columns": ["taxonomy_id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (taxonomy_id) REFERENCES organisms (taxonomy_id)",
+      "virtual": false
+    },
+    {
+      "table": "gene_models",
+      "columns": ["genome_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "genomes",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (genome_id) REFERENCES genomes (id)",
+      "virtual": false
+    },
+    {
+      "table": "gene_models",
+      "columns": ["annotation_model_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "annotation_models",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (annotation_model_id) REFERENCES annotation_models (id)",
+      "virtual": false
+    },
+    {
+      "table": "genes",
+      "columns": ["gene_model_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "gene_models",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (gene_model_id) REFERENCES gene_models (id)",
+      "virtual": false
+    },
+    {
+      "table": "genomes",
+      "columns": ["organism_taxonomy_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "organisms",
+      "parent_columns": ["taxonomy_id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (organism_taxonomy_id) REFERENCES organisms (taxonomy_id)",
+      "virtual": false
+    },
+    {
+      "table": "gff_records",
+      "columns": ["gene_model_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "gene_models",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (gene_model_id) REFERENCES gene_models (id)",
+      "virtual": false
+    },
+    {
+      "table": "go_terms_annotation",
+      "columns": ["go_term_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "go_terms",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (go_term_id) REFERENCES go_terms (id)",
+      "virtual": false
+    },
+    {
+      "table": "go_terms_annotation",
+      "columns": ["transcript_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "transcripts",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (transcript_id) REFERENCES transcripts (id)",
+      "virtual": false
+    },
+    {
+      "table": "go_terms_annotation",
+      "columns": ["assisgned_by"],
+      "cardinality": "Zero or more",
+      "parent_table": "users",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Zero or one",
+      "def": "FOREIGN KEY (assisgned_by) REFERENCES users (id)",
+      "virtual": false
+    },
+    {
+      "table": "kegg_orthologies_annotation",
+      "columns": ["kegg_orthology_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "kegg_orthologies",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (kegg_orthology_id) REFERENCES kegg_orthologies (id)",
+      "virtual": false
+    },
+    {
+      "table": "kegg_orthologies_annotation",
+      "columns": ["transcript_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "transcripts",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (transcript_id) REFERENCES transcripts (id)",
+      "virtual": false
+    },
+    {
+      "table": "kegg_pathways_annotation",
+      "columns": ["kegg_pathway_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "kegg_pathways",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (kegg_pathway_id) REFERENCES kegg_pathways (id)",
+      "virtual": false
+    },
+    {
+      "table": "kegg_pathways_annotation",
+      "columns": ["transcript_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "transcripts",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (transcript_id) REFERENCES transcripts (id)",
+      "virtual": false
+    },
+    {
+      "table": "kegg_reaction_annotation",
+      "columns": ["kegg_reaction_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "kegg_reaction",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (kegg_reaction_id) REFERENCES kegg_reaction (id)",
+      "virtual": false
+    },
+    {
+      "table": "kegg_reaction_annotation",
+      "columns": ["transcript_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "transcripts",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (transcript_id) REFERENCES transcripts (id)",
+      "virtual": false
+    },
+    {
+      "table": "kog_annotations",
+      "columns": ["kog_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "kogs",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (kog_id) REFERENCES kogs (id)",
+      "virtual": false
+    },
+    {
+      "table": "kog_annotations",
+      "columns": ["transcript_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "transcripts",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (transcript_id) REFERENCES transcripts (id)",
+      "virtual": false
+    },
+    {
+      "table": "transcript_structure",
+      "columns": ["transcript_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "transcripts",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (transcript_id) REFERENCES transcripts (id)",
+      "virtual": false
+    },
+    {
+      "table": "transcript_structure",
+      "columns": ["gff_record_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "gff_records",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (gff_record_id) REFERENCES gff_records (id)",
+      "virtual": false
+    },
+    {
+      "table": "transcripts",
+      "columns": ["gene_model_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "gene_models",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (gene_model_id) REFERENCES gene_models (id)",
+      "virtual": false
+    },
+    {
+      "table": "transcripts",
+      "columns": ["gene_id"],
+      "cardinality": "Zero or more",
+      "parent_table": "genes",
+      "parent_columns": ["id"],
+      "parent_cardinality": "Exactly one",
+      "def": "FOREIGN KEY (gene_id) REFERENCES genes (id)",
+      "virtual": false
+    }
+  ],
+  "functions": [],
+  "driver": {
+    "name": "mysql",
+    "database_version": "8.0.32",
+    "meta": { "dict": { "Functions": "Stored procedures and functions" } }
+  }
+}

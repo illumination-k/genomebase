@@ -19,23 +19,23 @@ CREATE TABLE `go_terms` (
 
 ## Columns
 
-| Name | Type | Default | Nullable | Children | Parents | Comment |
-| ---- | ---- | ------- | -------- | -------- | ------- | ------- |
-| id | varchar(255) |  | false | [go_terms_annotation](go_terms_annotation.md) |  |  |
-| name | varchar(255) |  | false |  |  |  |
-| namespace | enum('BP','CC','MF') |  | false |  |  |  |
-| definition | text |  | false |  |  |  |
+| Name       | Type                 | Default | Nullable | Children                                      | Parents | Comment |
+| ---------- | -------------------- | ------- | -------- | --------------------------------------------- | ------- | ------- |
+| id         | varchar(255)         |         | false    | [go_terms_annotation](go_terms_annotation.md) |         |         |
+| name       | varchar(255)         |         | false    |                                               |         |         |
+| namespace  | enum('BP','CC','MF') |         | false    |                                               |         |         |
+| definition | text                 |         | false    |                                               |         |         |
 
 ## Constraints
 
-| Name | Type | Definition |
-| ---- | ---- | ---------- |
+| Name    | Type        | Definition       |
+| ------- | ----------- | ---------------- |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
 
 ## Indexes
 
-| Name | Definition |
-| ---- | ---------- |
+| Name    | Definition                   |
+| ------- | ---------------------------- |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |
 
 ## Relations

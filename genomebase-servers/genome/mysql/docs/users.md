@@ -18,22 +18,22 @@ CREATE TABLE `users` (
 
 ## Columns
 
-| Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
-| ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
-| id | binary(16) | uuid_to_bin(uuid()) | false | DEFAULT_GENERATED | [go_terms_annotation](go_terms_annotation.md) |  |  |
-| orc_id | varchar(255) |  | false |  |  |  |  |
-| email | varchar(255) |  | false |  |  |  |  |
+| Name   | Type         | Default             | Nullable | Extra Definition  | Children                                      | Parents | Comment |
+| ------ | ------------ | ------------------- | -------- | ----------------- | --------------------------------------------- | ------- | ------- |
+| id     | binary(16)   | uuid_to_bin(uuid()) | false    | DEFAULT_GENERATED | [go_terms_annotation](go_terms_annotation.md) |         |         |
+| orc_id | varchar(255) |                     | false    |                   |                                               |         |         |
+| email  | varchar(255) |                     | false    |                   |                                               |         |         |
 
 ## Constraints
 
-| Name | Type | Definition |
-| ---- | ---- | ---------- |
+| Name    | Type        | Definition       |
+| ------- | ----------- | ---------------- |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
 
 ## Indexes
 
-| Name | Definition |
-| ---- | ---------- |
+| Name    | Definition                   |
+| ------- | ---------------------------- |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |
 
 ## Relations

@@ -20,25 +20,25 @@ CREATE TABLE `kog_annotations` (
 
 ## Columns
 
-| Name | Type | Default | Nullable | Children | Parents | Comment |
-| ---- | ---- | ------- | -------- | -------- | ------- | ------- |
-| kog_id | varchar(255) |  | false |  | [kogs](kogs.md) |  |
-| transcript_id | binary(16) |  | false |  | [transcripts](transcripts.md) |  |
+| Name          | Type         | Default | Nullable | Children | Parents                       | Comment |
+| ------------- | ------------ | ------- | -------- | -------- | ----------------------------- | ------- |
+| kog_id        | varchar(255) |         | false    |          | [kogs](kogs.md)               |         |
+| transcript_id | binary(16)   |         | false    |          | [transcripts](transcripts.md) |         |
 
 ## Constraints
 
-| Name | Type | Definition |
-| ---- | ---- | ---------- |
-| kog_annotations_ibfk_1 | FOREIGN KEY | FOREIGN KEY (kog_id) REFERENCES kogs (id) |
+| Name                   | Type        | Definition                                              |
+| ---------------------- | ----------- | ------------------------------------------------------- |
+| kog_annotations_ibfk_1 | FOREIGN KEY | FOREIGN KEY (kog_id) REFERENCES kogs (id)               |
 | kog_annotations_ibfk_2 | FOREIGN KEY | FOREIGN KEY (transcript_id) REFERENCES transcripts (id) |
-| PRIMARY | PRIMARY KEY | PRIMARY KEY (kog_id, transcript_id) |
+| PRIMARY                | PRIMARY KEY | PRIMARY KEY (kog_id, transcript_id)                     |
 
 ## Indexes
 
-| Name | Definition |
-| ---- | ---------- |
-| transcript_id | KEY transcript_id (transcript_id) USING BTREE |
-| PRIMARY | PRIMARY KEY (kog_id, transcript_id) USING BTREE |
+| Name          | Definition                                      |
+| ------------- | ----------------------------------------------- |
+| transcript_id | KEY transcript_id (transcript_id) USING BTREE   |
+| PRIMARY       | PRIMARY KEY (kog_id, transcript_id) USING BTREE |
 
 ## Relations
 

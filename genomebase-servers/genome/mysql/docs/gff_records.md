@@ -29,34 +29,34 @@ CREATE TABLE `gff_records` (
 
 ## Columns
 
-| Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
-| ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
-| id | binary(16) | uuid_to_bin(uuid()) | false | DEFAULT_GENERATED | [transcript_structure](transcript_structure.md) |  |  |
-| gene_model_id | binary(16) |  | false |  |  | [gene_models](gene_models.md) |  |
-| seqname | varchar(255) |  | false |  |  |  |  |
-| source | varchar(255) |  | false |  |  |  |  |
-| type | varchar(255) |  | false |  |  |  |  |
-| start | int |  | false |  |  |  |  |
-| end | int |  | false |  |  |  |  |
-| score | float |  | false |  |  |  |  |
-| strand | char(1) |  | false |  |  |  |  |
-| phase | char(1) |  | false |  |  |  |  |
-| attributes | json |  | false |  |  |  |  |
+| Name          | Type         | Default             | Nullable | Extra Definition  | Children                                        | Parents                       | Comment |
+| ------------- | ------------ | ------------------- | -------- | ----------------- | ----------------------------------------------- | ----------------------------- | ------- |
+| id            | binary(16)   | uuid_to_bin(uuid()) | false    | DEFAULT_GENERATED | [transcript_structure](transcript_structure.md) |                               |         |
+| gene_model_id | binary(16)   |                     | false    |                   |                                                 | [gene_models](gene_models.md) |         |
+| seqname       | varchar(255) |                     | false    |                   |                                                 |                               |         |
+| source        | varchar(255) |                     | false    |                   |                                                 |                               |         |
+| type          | varchar(255) |                     | false    |                   |                                                 |                               |         |
+| start         | int          |                     | false    |                   |                                                 |                               |         |
+| end           | int          |                     | false    |                   |                                                 |                               |         |
+| score         | float        |                     | false    |                   |                                                 |                               |         |
+| strand        | char(1)      |                     | false    |                   |                                                 |                               |         |
+| phase         | char(1)      |                     | false    |                   |                                                 |                               |         |
+| attributes    | json         |                     | false    |                   |                                                 |                               |         |
 
 ## Constraints
 
-| Name | Type | Definition |
-| ---- | ---- | ---------- |
+| Name               | Type        | Definition                                              |
+| ------------------ | ----------- | ------------------------------------------------------- |
 | gff_records_ibfk_1 | FOREIGN KEY | FOREIGN KEY (gene_model_id) REFERENCES gene_models (id) |
-| PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
+| PRIMARY            | PRIMARY KEY | PRIMARY KEY (id)                                        |
 
 ## Indexes
 
-| Name | Definition |
-| ---- | ---------- |
-| gene_model_id | KEY gene_model_id (gene_model_id) USING BTREE |
+| Name                              | Definition                                                              |
+| --------------------------------- | ----------------------------------------------------------------------- |
+| gene_model_id                     | KEY gene_model_id (gene_model_id) USING BTREE                           |
 | idx_gff_records_seqname_start_end | KEY idx_gff_records_seqname_start_end (seqname, start, end) USING BTREE |
-| PRIMARY | PRIMARY KEY (id) USING BTREE |
+| PRIMARY                           | PRIMARY KEY (id) USING BTREE                                            |
 
 ## Relations
 
