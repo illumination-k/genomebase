@@ -18,22 +18,22 @@ CREATE TABLE `kegg_orthologies` (
 
 ## Columns
 
-| Name        | Type         | Default | Nullable | Children                                                      | Parents | Comment |
-| ----------- | ------------ | ------- | -------- | ------------------------------------------------------------- | ------- | ------- |
-| id          | varchar(255) |         | false    | [kegg_orthologies_annotation](kegg_orthologies_annotation.md) |         |         |
-| name        | varchar(255) |         | false    |                                                               |         |         |
-| description | text         |         | false    |                                                               |         |         |
+| Name | Type | Default | Nullable | Children | Parents | Comment |
+| ---- | ---- | ------- | -------- | -------- | ------- | ------- |
+| id | varchar(255) |  | false | [kegg_orthologies_annotation](kegg_orthologies_annotation.md) [kegg_orthology_pathway](kegg_orthology_pathway.md) [kegg_reaction_orthology](kegg_reaction_orthology.md) |  |  |
+| name | varchar(255) |  | false |  |  |  |
+| description | text |  | false |  |  |  |
 
 ## Constraints
 
-| Name    | Type        | Definition       |
-| ------- | ----------- | ---------------- |
+| Name | Type | Definition |
+| ---- | ---- | ---------- |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
 
 ## Indexes
 
-| Name    | Definition                   |
-| ------- | ---------------------------- |
+| Name | Definition |
+| ---- | ---------- |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |
 
 ## Relations

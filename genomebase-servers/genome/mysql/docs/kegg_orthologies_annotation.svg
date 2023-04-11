@@ -34,66 +34,66 @@
 <!-- kegg_orthologies -->
 <g id="node2" class="node">
 <title>kegg_orthologies</title>
-<polygon fill="#efefef" stroke="transparent" points="208,-207.5 208,-242.5 486,-242.5 486,-207.5 208,-207.5"/>
-<polygon fill="none" stroke="#000000" points="208,-207.5 208,-242.5 486,-242.5 486,-207.5 208,-207.5"/>
-<text text-anchor="start" x="214.6936" y="-220.3" font-family="Arial Bold" font-size="18.00" fill="#000000">kegg_orthologies</text>
-<text text-anchor="start" x="351.7384" y="-220.3" font-family="Arial" font-size="14.00" fill="#000000">    </text>
-<text text-anchor="start" x="385.9432" y="-220.3" font-family="Arial" font-size="14.00" fill="#666666">[BASE TABLE]</text>
-<polygon fill="none" stroke="#000000" points="208,-177.5 208,-207.5 486,-207.5 486,-177.5 208,-177.5"/>
-<text text-anchor="start" x="215" y="-188.9" font-family="Arial" font-size="14.00" fill="#000000">id    </text>
-<text text-anchor="start" x="260.094" y="-188.9" font-family="Arial" font-size="14.00" fill="#666666">[varchar(255)]</text>
-<polygon fill="none" stroke="#000000" points="208,-147.5 208,-177.5 486,-177.5 486,-147.5 208,-147.5"/>
-<text text-anchor="start" x="215" y="-158.9" font-family="Arial" font-size="14.00" fill="#000000">name    </text>
-<text text-anchor="start" x="284.2132" y="-158.9" font-family="Arial" font-size="14.00" fill="#666666">[varchar(255)]</text>
-<polygon fill="none" stroke="#000000" points="208,-117.5 208,-147.5 486,-147.5 486,-117.5 208,-117.5"/>
-<text text-anchor="start" x="215" y="-128.9" font-family="Arial" font-size="14.00" fill="#000000">description    </text>
-<text text-anchor="start" x="316.8822" y="-128.9" font-family="Arial" font-size="14.00" fill="#666666">[text]</text>
+<polygon fill="#efefef" stroke="transparent" points="201,-207.5 201,-242.5 479,-242.5 479,-207.5 201,-207.5"/>
+<polygon fill="none" stroke="#000000" points="201,-207.5 201,-242.5 479,-242.5 479,-207.5 201,-207.5"/>
+<text text-anchor="start" x="207.6936" y="-220.3" font-family="Arial Bold" font-size="18.00" fill="#000000">kegg_orthologies</text>
+<text text-anchor="start" x="344.7384" y="-220.3" font-family="Arial" font-size="14.00" fill="#000000">    </text>
+<text text-anchor="start" x="378.9432" y="-220.3" font-family="Arial" font-size="14.00" fill="#666666">[BASE TABLE]</text>
+<polygon fill="none" stroke="#000000" points="201,-177.5 201,-207.5 479,-207.5 479,-177.5 201,-177.5"/>
+<text text-anchor="start" x="208" y="-188.9" font-family="Arial" font-size="14.00" fill="#000000">id    </text>
+<text text-anchor="start" x="253.094" y="-188.9" font-family="Arial" font-size="14.00" fill="#666666">[varchar(255)]</text>
+<polygon fill="none" stroke="#000000" points="201,-147.5 201,-177.5 479,-177.5 479,-147.5 201,-147.5"/>
+<text text-anchor="start" x="208" y="-158.9" font-family="Arial" font-size="14.00" fill="#000000">name    </text>
+<text text-anchor="start" x="277.2132" y="-158.9" font-family="Arial" font-size="14.00" fill="#666666">[varchar(255)]</text>
+<polygon fill="none" stroke="#000000" points="201,-117.5 201,-147.5 479,-147.5 479,-117.5 201,-117.5"/>
+<text text-anchor="start" x="208" y="-128.9" font-family="Arial" font-size="14.00" fill="#000000">description    </text>
+<text text-anchor="start" x="309.8822" y="-128.9" font-family="Arial" font-size="14.00" fill="#666666">[text]</text>
 </g>
 <!-- kegg_orthologies_annotation&#45;&gt;kegg_orthologies -->
 <g id="edge1" class="edge">
 <title>kegg_orthologies_annotation:kegg_orthology_id&#45;&gt;kegg_orthologies:id</title>
-<path fill="none" stroke="#000000" d="M329.9414,-546.7072C277.1544,-537.685 311.9075,-453.6476 340,-397 376.2149,-323.9738 449.7851,-359.0262 486,-286 504.4625,-248.771 527.5556,-192.5 486,-192.5"/>
-<polygon fill="#000000" stroke="#000000" points="330.0309,-546.7141 339.6464,-551.9861 335.0155,-547.1071 340,-547.5 340,-547.5 340,-547.5 335.0155,-547.1071 340.3536,-543.0139 330.0309,-546.7141 330.0309,-546.7141"/>
+<path fill="none" stroke="#000000" d="M329.9475,-546.7101C277.2284,-537.7212 312.5841,-453.9782 340,-397 374.2786,-325.7592 444.7214,-357.2408 479,-286 497.0178,-248.5537 520.5556,-192.5 479,-192.5"/>
+<polygon fill="#000000" stroke="#000000" points="330.0307,-546.7166 339.6475,-551.9862 335.0154,-547.1083 340,-547.5 340,-547.5 340,-547.5 335.0154,-547.1083 340.3525,-543.0138 330.0307,-546.7166 330.0307,-546.7166"/>
 <text text-anchor="start" x="6.645" y="-557.5" font-family="Arial" font-size="10.00" fill="#000000">FOREIGN KEY (kegg_orthology_id) REFERENCES kegg_orthologies (id)</text>
 </g>
 <!-- transcripts -->
 <g id="node3" class="node">
 <title>transcripts</title>
-<polygon fill="#efefef" stroke="transparent" points="591,-282.5 591,-317.5 818,-317.5 818,-282.5 591,-282.5"/>
-<polygon fill="none" stroke="#000000" points="591,-282.5 591,-317.5 818,-317.5 818,-282.5 591,-282.5"/>
-<text text-anchor="start" x="599.2152" y="-295.3" font-family="Arial Bold" font-size="18.00" fill="#000000">transcripts</text>
-<text text-anchor="start" x="682.2168" y="-295.3" font-family="Arial" font-size="14.00" fill="#000000">    </text>
-<text text-anchor="start" x="716.4216" y="-295.3" font-family="Arial" font-size="14.00" fill="#666666">[BASE TABLE]</text>
-<polygon fill="none" stroke="#000000" points="591,-252.5 591,-282.5 818,-282.5 818,-252.5 591,-252.5"/>
-<text text-anchor="start" x="598" y="-263.9" font-family="Arial" font-size="14.00" fill="#000000">id    </text>
-<text text-anchor="start" x="643.094" y="-263.9" font-family="Arial" font-size="14.00" fill="#666666">[binary(16)]</text>
-<polygon fill="none" stroke="#000000" points="591,-222.5 591,-252.5 818,-252.5 818,-222.5 591,-222.5"/>
-<text text-anchor="start" x="598" y="-233.9" font-family="Arial" font-size="14.00" fill="#000000">transcript_id    </text>
-<text text-anchor="start" x="708.4334" y="-233.9" font-family="Arial" font-size="14.00" fill="#666666">[varchar(255)]</text>
-<polygon fill="none" stroke="#000000" points="591,-192.5 591,-222.5 818,-222.5 818,-192.5 591,-192.5"/>
-<text text-anchor="start" x="598" y="-203.9" font-family="Arial" font-size="14.00" fill="#000000">gene_model_id    </text>
-<text text-anchor="start" x="727.9046" y="-203.9" font-family="Arial" font-size="14.00" fill="#666666">[binary(16)]</text>
-<polygon fill="none" stroke="#000000" points="591,-162.5 591,-192.5 818,-192.5 818,-162.5 591,-162.5"/>
-<text text-anchor="start" x="598" y="-173.9" font-family="Arial" font-size="14.00" fill="#000000">gene_id    </text>
-<text text-anchor="start" x="682.007" y="-173.9" font-family="Arial" font-size="14.00" fill="#666666">[binary(16)]</text>
-<polygon fill="none" stroke="#000000" points="591,-132.5 591,-162.5 818,-162.5 818,-132.5 591,-132.5"/>
-<text text-anchor="start" x="597.9404" y="-143.9" font-family="Arial" font-size="14.00" fill="#000000">transcript_type    </text>
-<text text-anchor="start" x="723.9404" y="-143.9" font-family="Arial" font-size="14.00" fill="#666666">[varchar(255)]</text>
-<polygon fill="none" stroke="#000000" points="591,-102.5 591,-132.5 818,-132.5 818,-102.5 591,-102.5"/>
-<text text-anchor="start" x="598" y="-113.9" font-family="Arial" font-size="14.00" fill="#000000">start    </text>
-<text text-anchor="start" x="659.4292" y="-113.9" font-family="Arial" font-size="14.00" fill="#666666">[int]</text>
-<polygon fill="none" stroke="#000000" points="591,-72.5 591,-102.5 818,-102.5 818,-72.5 591,-72.5"/>
-<text text-anchor="start" x="598" y="-83.9" font-family="Arial" font-size="14.00" fill="#000000">end    </text>
-<text text-anchor="start" x="655.5526" y="-83.9" font-family="Arial" font-size="14.00" fill="#666666">[int]</text>
-<polygon fill="none" stroke="#000000" points="591,-42.5 591,-72.5 818,-72.5 818,-42.5 591,-42.5"/>
-<text text-anchor="start" x="598" y="-53.9" font-family="Arial" font-size="14.00" fill="#000000">strand    </text>
-<text text-anchor="start" x="671.1038" y="-53.9" font-family="Arial" font-size="14.00" fill="#666666">[char(1)]</text>
+<polygon fill="#efefef" stroke="transparent" points="584,-282.5 584,-317.5 839,-317.5 839,-282.5 584,-282.5"/>
+<polygon fill="none" stroke="#000000" points="584,-282.5 584,-317.5 839,-317.5 839,-282.5 584,-282.5"/>
+<text text-anchor="start" x="606.2152" y="-295.3" font-family="Arial Bold" font-size="18.00" fill="#000000">transcripts</text>
+<text text-anchor="start" x="689.2168" y="-295.3" font-family="Arial" font-size="14.00" fill="#000000">    </text>
+<text text-anchor="start" x="723.4216" y="-295.3" font-family="Arial" font-size="14.00" fill="#666666">[BASE TABLE]</text>
+<polygon fill="none" stroke="#000000" points="584,-252.5 584,-282.5 839,-282.5 839,-252.5 584,-252.5"/>
+<text text-anchor="start" x="591" y="-263.9" font-family="Arial" font-size="14.00" fill="#000000">id    </text>
+<text text-anchor="start" x="636.094" y="-263.9" font-family="Arial" font-size="14.00" fill="#666666">[binary(16)]</text>
+<polygon fill="none" stroke="#000000" points="584,-222.5 584,-252.5 839,-252.5 839,-222.5 584,-222.5"/>
+<text text-anchor="start" x="591" y="-233.9" font-family="Arial" font-size="14.00" fill="#000000">transcript_id    </text>
+<text text-anchor="start" x="701.4334" y="-233.9" font-family="Arial" font-size="14.00" fill="#666666">[varchar(255)]</text>
+<polygon fill="none" stroke="#000000" points="584,-192.5 584,-222.5 839,-222.5 839,-192.5 584,-192.5"/>
+<text text-anchor="start" x="591" y="-203.9" font-family="Arial" font-size="14.00" fill="#000000">transcript_type    </text>
+<text text-anchor="start" x="717" y="-203.9" font-family="Arial" font-size="14.00" fill="#666666">[varchar(255)]</text>
+<polygon fill="none" stroke="#000000" points="584,-162.5 584,-192.5 839,-192.5 839,-162.5 584,-162.5"/>
+<text text-anchor="start" x="591" y="-173.9" font-family="Arial" font-size="14.00" fill="#000000">start    </text>
+<text text-anchor="start" x="652.4292" y="-173.9" font-family="Arial" font-size="14.00" fill="#666666">[int]</text>
+<polygon fill="none" stroke="#000000" points="584,-132.5 584,-162.5 839,-162.5 839,-132.5 584,-132.5"/>
+<text text-anchor="start" x="591" y="-143.9" font-family="Arial" font-size="14.00" fill="#000000">end    </text>
+<text text-anchor="start" x="648.5526" y="-143.9" font-family="Arial" font-size="14.00" fill="#666666">[int]</text>
+<polygon fill="none" stroke="#000000" points="584,-102.5 584,-132.5 839,-132.5 839,-102.5 584,-102.5"/>
+<text text-anchor="start" x="591" y="-113.9" font-family="Arial" font-size="14.00" fill="#000000">strand    </text>
+<text text-anchor="start" x="664.1038" y="-113.9" font-family="Arial" font-size="14.00" fill="#666666">[char(1)]</text>
+<polygon fill="none" stroke="#000000" points="584,-72.5 584,-102.5 839,-102.5 839,-72.5 584,-72.5"/>
+<text text-anchor="start" x="590.5386" y="-83.9" font-family="Arial" font-size="14.00" fill="#000000">annotation_version_id    </text>
+<text text-anchor="start" x="761.6788" y="-83.9" font-family="Arial" font-size="14.00" fill="#666666">[binary(16)]</text>
+<polygon fill="none" stroke="#000000" points="584,-42.5 584,-72.5 839,-72.5 839,-42.5 584,-42.5"/>
+<text text-anchor="start" x="591" y="-53.9" font-family="Arial" font-size="14.00" fill="#000000">gene_id    </text>
+<text text-anchor="start" x="675.007" y="-53.9" font-family="Arial" font-size="14.00" fill="#666666">[binary(16)]</text>
 </g>
 <!-- kegg_orthologies_annotation&#45;&gt;transcripts -->
 <g id="edge2" class="edge">
 <title>kegg_orthologies_annotation:transcript_id&#45;&gt;transcripts:id</title>
-<path fill="none" stroke="#000000" d="M721.951,-516.4484C762.562,-507.0567 741.8291,-436.9961 712,-397 678.4565,-352.0235 624.5435,-405.9765 591,-361 566.1563,-327.6885 549.4444,-267.5 591,-267.5"/>
-<polygon fill="#000000" stroke="#000000" points="721.9446,-516.449 711.527,-513.0249 716.9723,-516.9745 712,-517.5 712,-517.5 712,-517.5 716.9723,-516.9745 712.473,-521.9751 721.9446,-516.449 721.9446,-516.449"/>
+<path fill="none" stroke="#000000" d="M721.9552,-516.4452C762.6029,-507.0259 742.1285,-436.7711 712,-397 676.3152,-349.8944 619.6848,-408.1056 584,-361 558.9069,-327.876 542.4444,-267.5 584,-267.5"/>
+<polygon fill="#000000" stroke="#000000" points="721.9443,-516.4463 711.5258,-513.025 716.9722,-516.9732 712,-517.5 712,-517.5 712,-517.5 716.9722,-516.9732 712.4742,-521.975 721.9443,-516.4463 721.9443,-516.4463"/>
 <text text-anchor="start" x="719.28" y="-527.5" font-family="Arial" font-size="10.00" fill="#000000">FOREIGN KEY (transcript_id) REFERENCES transcripts (id)</text>
 </g>
 </g>

@@ -22,27 +22,27 @@ CREATE TABLE `domain_annotations` (
 
 ## Columns
 
-| Name          | Type         | Default | Nullable | Children | Parents                       | Comment |
-| ------------- | ------------ | ------- | -------- | -------- | ----------------------------- | ------- |
-| domain_id     | varchar(255) |         | false    |          | [domains](domains.md)         |         |
-| transcript_id | binary(16)   |         | false    |          | [transcripts](transcripts.md) |         |
-| start         | int          |         | false    |          |                               |         |
-| end           | int          |         | false    |          |                               |         |
+| Name | Type | Default | Nullable | Children | Parents | Comment |
+| ---- | ---- | ------- | -------- | -------- | ------- | ------- |
+| domain_id | varchar(255) |  | false |  | [domains](domains.md) |  |
+| transcript_id | binary(16) |  | false |  | [transcripts](transcripts.md) |  |
+| start | int |  | false |  |  |  |
+| end | int |  | false |  |  |  |
 
 ## Constraints
 
-| Name                      | Type        | Definition                                              |
-| ------------------------- | ----------- | ------------------------------------------------------- |
-| domain_annotations_ibfk_1 | FOREIGN KEY | FOREIGN KEY (domain_id) REFERENCES domains (id)         |
+| Name | Type | Definition |
+| ---- | ---- | ---------- |
+| domain_annotations_ibfk_1 | FOREIGN KEY | FOREIGN KEY (domain_id) REFERENCES domains (id) |
 | domain_annotations_ibfk_2 | FOREIGN KEY | FOREIGN KEY (transcript_id) REFERENCES transcripts (id) |
-| PRIMARY                   | PRIMARY KEY | PRIMARY KEY (domain_id, transcript_id)                  |
+| PRIMARY | PRIMARY KEY | PRIMARY KEY (domain_id, transcript_id) |
 
 ## Indexes
 
-| Name          | Definition                                         |
-| ------------- | -------------------------------------------------- |
-| transcript_id | KEY transcript_id (transcript_id) USING BTREE      |
-| PRIMARY       | PRIMARY KEY (domain_id, transcript_id) USING BTREE |
+| Name | Definition |
+| ---- | ---------- |
+| transcript_id | KEY transcript_id (transcript_id) USING BTREE |
+| PRIMARY | PRIMARY KEY (domain_id, transcript_id) USING BTREE |
 
 ## Relations
 

@@ -18,22 +18,22 @@ CREATE TABLE `organisms` (
 
 ## Columns
 
-| Name        | Type         | Default | Nullable | Children                                            | Parents | Comment |
-| ----------- | ------------ | ------- | -------- | --------------------------------------------------- | ------- | ------- |
-| taxonomy_id | int unsigned |         | false    | [gene_models](gene_models.md) [genomes](genomes.md) |         |         |
-| name        | varchar(255) |         | false    |                                                     |         |         |
-| codon_code  | int unsigned | 1       | false    |                                                     |         |         |
+| Name | Type | Default | Nullable | Children | Parents | Comment |
+| ---- | ---- | ------- | -------- | -------- | ------- | ------- |
+| taxonomy_id | int unsigned |  | false | [genome_versions](genome_versions.md) |  |  |
+| name | varchar(255) |  | false |  |  |  |
+| codon_code | int unsigned | 1 | false |  |  |  |
 
 ## Constraints
 
-| Name    | Type        | Definition                |
-| ------- | ----------- | ------------------------- |
+| Name | Type | Definition |
+| ---- | ---- | ---------- |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (taxonomy_id) |
 
 ## Indexes
 
-| Name    | Definition                            |
-| ------- | ------------------------------------- |
+| Name | Definition |
+| ---- | ---------- |
 | PRIMARY | PRIMARY KEY (taxonomy_id) USING BTREE |
 
 ## Relations

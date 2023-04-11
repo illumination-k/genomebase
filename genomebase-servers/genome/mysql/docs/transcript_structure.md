@@ -20,25 +20,25 @@ CREATE TABLE `transcript_structure` (
 
 ## Columns
 
-| Name          | Type       | Default | Nullable | Children | Parents                       | Comment |
-| ------------- | ---------- | ------- | -------- | -------- | ----------------------------- | ------- |
-| transcript_id | binary(16) |         | false    |          | [transcripts](transcripts.md) |         |
-| gff_record_id | binary(16) |         | false    |          | [gff_records](gff_records.md) |         |
+| Name | Type | Default | Nullable | Children | Parents | Comment |
+| ---- | ---- | ------- | -------- | -------- | ------- | ------- |
+| transcript_id | binary(16) |  | false |  | [transcripts](transcripts.md) |  |
+| gff_record_id | binary(16) |  | false |  | [gff_records](gff_records.md) |  |
 
 ## Constraints
 
-| Name                        | Type        | Definition                                              |
-| --------------------------- | ----------- | ------------------------------------------------------- |
-| PRIMARY                     | PRIMARY KEY | PRIMARY KEY (transcript_id, gff_record_id)              |
+| Name | Type | Definition |
+| ---- | ---- | ---------- |
+| PRIMARY | PRIMARY KEY | PRIMARY KEY (transcript_id, gff_record_id) |
 | transcript_structure_ibfk_1 | FOREIGN KEY | FOREIGN KEY (transcript_id) REFERENCES transcripts (id) |
 | transcript_structure_ibfk_2 | FOREIGN KEY | FOREIGN KEY (gff_record_id) REFERENCES gff_records (id) |
 
 ## Indexes
 
-| Name          | Definition                                             |
-| ------------- | ------------------------------------------------------ |
-| gff_record_id | KEY gff_record_id (gff_record_id) USING BTREE          |
-| PRIMARY       | PRIMARY KEY (transcript_id, gff_record_id) USING BTREE |
+| Name | Definition |
+| ---- | ---------- |
+| gff_record_id | KEY gff_record_id (gff_record_id) USING BTREE |
+| PRIMARY | PRIMARY KEY (transcript_id, gff_record_id) USING BTREE |
 
 ## Relations
 

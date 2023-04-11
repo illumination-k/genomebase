@@ -34,66 +34,66 @@
 <!-- domains -->
 <g id="node2" class="node">
 <title>domains</title>
-<polygon fill="#efefef" stroke="transparent" points="152,-207.5 152,-242.5 361,-242.5 361,-207.5 152,-207.5"/>
-<polygon fill="none" stroke="#000000" points="152,-207.5 152,-242.5 361,-242.5 361,-207.5 152,-207.5"/>
-<text text-anchor="start" x="158.7104" y="-220.3" font-family="Arial Bold" font-size="18.00" fill="#000000">domains</text>
-<text text-anchor="start" x="226.7216" y="-220.3" font-family="Arial" font-size="14.00" fill="#000000">    </text>
-<text text-anchor="start" x="260.9264" y="-220.3" font-family="Arial" font-size="14.00" fill="#666666">[BASE TABLE]</text>
-<polygon fill="none" stroke="#000000" points="152,-177.5 152,-207.5 361,-207.5 361,-177.5 152,-177.5"/>
-<text text-anchor="start" x="159" y="-188.9" font-family="Arial" font-size="14.00" fill="#000000">id    </text>
-<text text-anchor="start" x="204.094" y="-188.9" font-family="Arial" font-size="14.00" fill="#666666">[varchar(255)]</text>
-<polygon fill="none" stroke="#000000" points="152,-147.5 152,-177.5 361,-177.5 361,-147.5 152,-147.5"/>
-<text text-anchor="start" x="159" y="-158.9" font-family="Arial" font-size="14.00" fill="#000000">name    </text>
-<text text-anchor="start" x="228.2132" y="-158.9" font-family="Arial" font-size="14.00" fill="#666666">[varchar(255)]</text>
-<polygon fill="none" stroke="#000000" points="152,-117.5 152,-147.5 361,-147.5 361,-117.5 152,-117.5"/>
-<text text-anchor="start" x="159" y="-128.9" font-family="Arial" font-size="14.00" fill="#000000">description    </text>
-<text text-anchor="start" x="260.8822" y="-128.9" font-family="Arial" font-size="14.00" fill="#666666">[text]</text>
+<polygon fill="#efefef" stroke="transparent" points="145,-207.5 145,-242.5 354,-242.5 354,-207.5 145,-207.5"/>
+<polygon fill="none" stroke="#000000" points="145,-207.5 145,-242.5 354,-242.5 354,-207.5 145,-207.5"/>
+<text text-anchor="start" x="151.7104" y="-220.3" font-family="Arial Bold" font-size="18.00" fill="#000000">domains</text>
+<text text-anchor="start" x="219.7216" y="-220.3" font-family="Arial" font-size="14.00" fill="#000000">    </text>
+<text text-anchor="start" x="253.9264" y="-220.3" font-family="Arial" font-size="14.00" fill="#666666">[BASE TABLE]</text>
+<polygon fill="none" stroke="#000000" points="145,-177.5 145,-207.5 354,-207.5 354,-177.5 145,-177.5"/>
+<text text-anchor="start" x="152" y="-188.9" font-family="Arial" font-size="14.00" fill="#000000">id    </text>
+<text text-anchor="start" x="197.094" y="-188.9" font-family="Arial" font-size="14.00" fill="#666666">[varchar(255)]</text>
+<polygon fill="none" stroke="#000000" points="145,-147.5 145,-177.5 354,-177.5 354,-147.5 145,-147.5"/>
+<text text-anchor="start" x="152" y="-158.9" font-family="Arial" font-size="14.00" fill="#000000">name    </text>
+<text text-anchor="start" x="221.2132" y="-158.9" font-family="Arial" font-size="14.00" fill="#666666">[varchar(255)]</text>
+<polygon fill="none" stroke="#000000" points="145,-117.5 145,-147.5 354,-147.5 354,-117.5 145,-117.5"/>
+<text text-anchor="start" x="152" y="-128.9" font-family="Arial" font-size="14.00" fill="#000000">description    </text>
+<text text-anchor="start" x="253.8822" y="-128.9" font-family="Arial" font-size="14.00" fill="#666666">[text]</text>
 </g>
 <!-- domain_annotations&#45;&gt;domains -->
 <g id="edge1" class="edge">
 <title>domain_annotations:domain_id&#45;&gt;domains:id</title>
-<path fill="none" stroke="#000000" d="M255.9969,-546.7311C203.83,-537.9764 244.0843,-456.3115 266,-397 288.5062,-336.0905 338.4938,-346.9095 361,-286 375.4031,-247.0203 402.5556,-192.5 361,-192.5"/>
-<polygon fill="#000000" stroke="#000000" points="256.0294,-546.7335 265.6551,-551.9868 261.0147,-547.1167 266,-547.5 266,-547.5 266,-547.5 261.0147,-547.1167 266.3449,-543.0132 256.0294,-546.7335 256.0294,-546.7335"/>
+<path fill="none" stroke="#000000" d="M255.5775,-547.2582C89.512,-539.2121 337.7078,-332.7753 354,-286 367.6687,-246.7568 395.5556,-192.5 354,-192.5"/>
+<polygon fill="#000000" stroke="#000000" points="256.0027,-547.2679 265.8956,-551.9988 261.0013,-547.384 266,-547.5 266,-547.5 266,-547.5 261.0013,-547.384 266.1044,-543.0012 256.0027,-547.2679 256.0027,-547.2679"/>
 <text text-anchor="start" x="6.608" y="-557.5" font-family="Arial" font-size="10.00" fill="#000000">FOREIGN KEY (domain_id) REFERENCES domains (id)</text>
 </g>
 <!-- transcripts -->
 <g id="node3" class="node">
 <title>transcripts</title>
-<polygon fill="#efefef" stroke="transparent" points="465,-282.5 465,-317.5 692,-317.5 692,-282.5 465,-282.5"/>
-<polygon fill="none" stroke="#000000" points="465,-282.5 465,-317.5 692,-317.5 692,-282.5 465,-282.5"/>
-<text text-anchor="start" x="473.2152" y="-295.3" font-family="Arial Bold" font-size="18.00" fill="#000000">transcripts</text>
-<text text-anchor="start" x="556.2168" y="-295.3" font-family="Arial" font-size="14.00" fill="#000000">    </text>
-<text text-anchor="start" x="590.4216" y="-295.3" font-family="Arial" font-size="14.00" fill="#666666">[BASE TABLE]</text>
-<polygon fill="none" stroke="#000000" points="465,-252.5 465,-282.5 692,-282.5 692,-252.5 465,-252.5"/>
-<text text-anchor="start" x="472" y="-263.9" font-family="Arial" font-size="14.00" fill="#000000">id    </text>
-<text text-anchor="start" x="517.094" y="-263.9" font-family="Arial" font-size="14.00" fill="#666666">[binary(16)]</text>
-<polygon fill="none" stroke="#000000" points="465,-222.5 465,-252.5 692,-252.5 692,-222.5 465,-222.5"/>
-<text text-anchor="start" x="472" y="-233.9" font-family="Arial" font-size="14.00" fill="#000000">transcript_id    </text>
-<text text-anchor="start" x="582.4334" y="-233.9" font-family="Arial" font-size="14.00" fill="#666666">[varchar(255)]</text>
-<polygon fill="none" stroke="#000000" points="465,-192.5 465,-222.5 692,-222.5 692,-192.5 465,-192.5"/>
-<text text-anchor="start" x="472" y="-203.9" font-family="Arial" font-size="14.00" fill="#000000">gene_model_id    </text>
-<text text-anchor="start" x="601.9046" y="-203.9" font-family="Arial" font-size="14.00" fill="#666666">[binary(16)]</text>
-<polygon fill="none" stroke="#000000" points="465,-162.5 465,-192.5 692,-192.5 692,-162.5 465,-162.5"/>
-<text text-anchor="start" x="472" y="-173.9" font-family="Arial" font-size="14.00" fill="#000000">gene_id    </text>
-<text text-anchor="start" x="556.007" y="-173.9" font-family="Arial" font-size="14.00" fill="#666666">[binary(16)]</text>
-<polygon fill="none" stroke="#000000" points="465,-132.5 465,-162.5 692,-162.5 692,-132.5 465,-132.5"/>
-<text text-anchor="start" x="471.9404" y="-143.9" font-family="Arial" font-size="14.00" fill="#000000">transcript_type    </text>
-<text text-anchor="start" x="597.9404" y="-143.9" font-family="Arial" font-size="14.00" fill="#666666">[varchar(255)]</text>
-<polygon fill="none" stroke="#000000" points="465,-102.5 465,-132.5 692,-132.5 692,-102.5 465,-102.5"/>
-<text text-anchor="start" x="472" y="-113.9" font-family="Arial" font-size="14.00" fill="#000000">start    </text>
-<text text-anchor="start" x="533.4292" y="-113.9" font-family="Arial" font-size="14.00" fill="#666666">[int]</text>
-<polygon fill="none" stroke="#000000" points="465,-72.5 465,-102.5 692,-102.5 692,-72.5 465,-72.5"/>
-<text text-anchor="start" x="472" y="-83.9" font-family="Arial" font-size="14.00" fill="#000000">end    </text>
-<text text-anchor="start" x="529.5526" y="-83.9" font-family="Arial" font-size="14.00" fill="#666666">[int]</text>
-<polygon fill="none" stroke="#000000" points="465,-42.5 465,-72.5 692,-72.5 692,-42.5 465,-42.5"/>
-<text text-anchor="start" x="472" y="-53.9" font-family="Arial" font-size="14.00" fill="#000000">strand    </text>
-<text text-anchor="start" x="545.1038" y="-53.9" font-family="Arial" font-size="14.00" fill="#666666">[char(1)]</text>
+<polygon fill="#efefef" stroke="transparent" points="458,-282.5 458,-317.5 713,-317.5 713,-282.5 458,-282.5"/>
+<polygon fill="none" stroke="#000000" points="458,-282.5 458,-317.5 713,-317.5 713,-282.5 458,-282.5"/>
+<text text-anchor="start" x="480.2152" y="-295.3" font-family="Arial Bold" font-size="18.00" fill="#000000">transcripts</text>
+<text text-anchor="start" x="563.2168" y="-295.3" font-family="Arial" font-size="14.00" fill="#000000">    </text>
+<text text-anchor="start" x="597.4216" y="-295.3" font-family="Arial" font-size="14.00" fill="#666666">[BASE TABLE]</text>
+<polygon fill="none" stroke="#000000" points="458,-252.5 458,-282.5 713,-282.5 713,-252.5 458,-252.5"/>
+<text text-anchor="start" x="465" y="-263.9" font-family="Arial" font-size="14.00" fill="#000000">id    </text>
+<text text-anchor="start" x="510.094" y="-263.9" font-family="Arial" font-size="14.00" fill="#666666">[binary(16)]</text>
+<polygon fill="none" stroke="#000000" points="458,-222.5 458,-252.5 713,-252.5 713,-222.5 458,-222.5"/>
+<text text-anchor="start" x="465" y="-233.9" font-family="Arial" font-size="14.00" fill="#000000">transcript_id    </text>
+<text text-anchor="start" x="575.4334" y="-233.9" font-family="Arial" font-size="14.00" fill="#666666">[varchar(255)]</text>
+<polygon fill="none" stroke="#000000" points="458,-192.5 458,-222.5 713,-222.5 713,-192.5 458,-192.5"/>
+<text text-anchor="start" x="465" y="-203.9" font-family="Arial" font-size="14.00" fill="#000000">transcript_type    </text>
+<text text-anchor="start" x="591" y="-203.9" font-family="Arial" font-size="14.00" fill="#666666">[varchar(255)]</text>
+<polygon fill="none" stroke="#000000" points="458,-162.5 458,-192.5 713,-192.5 713,-162.5 458,-162.5"/>
+<text text-anchor="start" x="465" y="-173.9" font-family="Arial" font-size="14.00" fill="#000000">start    </text>
+<text text-anchor="start" x="526.4292" y="-173.9" font-family="Arial" font-size="14.00" fill="#666666">[int]</text>
+<polygon fill="none" stroke="#000000" points="458,-132.5 458,-162.5 713,-162.5 713,-132.5 458,-132.5"/>
+<text text-anchor="start" x="465" y="-143.9" font-family="Arial" font-size="14.00" fill="#000000">end    </text>
+<text text-anchor="start" x="522.5526" y="-143.9" font-family="Arial" font-size="14.00" fill="#666666">[int]</text>
+<polygon fill="none" stroke="#000000" points="458,-102.5 458,-132.5 713,-132.5 713,-102.5 458,-102.5"/>
+<text text-anchor="start" x="465" y="-113.9" font-family="Arial" font-size="14.00" fill="#000000">strand    </text>
+<text text-anchor="start" x="538.1038" y="-113.9" font-family="Arial" font-size="14.00" fill="#666666">[char(1)]</text>
+<polygon fill="none" stroke="#000000" points="458,-72.5 458,-102.5 713,-102.5 713,-72.5 458,-72.5"/>
+<text text-anchor="start" x="464.5386" y="-83.9" font-family="Arial" font-size="14.00" fill="#000000">annotation_version_id    </text>
+<text text-anchor="start" x="635.6788" y="-83.9" font-family="Arial" font-size="14.00" fill="#666666">[binary(16)]</text>
+<polygon fill="none" stroke="#000000" points="458,-42.5 458,-72.5 713,-72.5 713,-42.5 458,-42.5"/>
+<text text-anchor="start" x="465" y="-53.9" font-family="Arial" font-size="14.00" fill="#000000">gene_id    </text>
+<text text-anchor="start" x="549.007" y="-53.9" font-family="Arial" font-size="14.00" fill="#666666">[binary(16)]</text>
 </g>
 <!-- domain_annotations&#45;&gt;transcripts -->
 <g id="edge2" class="edge">
 <title>domain_annotations:transcript_id&#45;&gt;transcripts:id</title>
-<path fill="none" stroke="#000000" d="M579.1924,-516.3981C619.3503,-506.8539 597.8801,-437.5583 569,-397 540.6285,-357.1559 493.3715,-400.8441 465,-361 440.8962,-327.1493 423.4444,-267.5 465,-267.5"/>
-<polygon fill="#000000" stroke="#000000" points="578.9421,-516.4251 568.5163,-513.0261 573.971,-516.9625 569,-517.5 569,-517.5 569,-517.5 573.971,-516.9625 569.4837,-521.9739 578.9421,-516.4251 578.9421,-516.4251"/>
+<path fill="none" stroke="#000000" d="M579.1983,-516.3939C619.4061,-506.8138 598.2766,-437.273 569,-397 538.5044,-355.0501 488.4956,-402.9499 458,-361 433.5652,-327.3874 416.4444,-267.5 458,-267.5"/>
+<polygon fill="#000000" stroke="#000000" points="578.9417,-516.4216 568.5147,-513.0262 573.9708,-516.9608 569,-517.5 569,-517.5 569,-517.5 573.9708,-516.9608 569.4853,-521.9738 578.9417,-516.4216 578.9417,-516.4216"/>
 <text text-anchor="start" x="576.28" y="-527.5" font-family="Arial" font-size="10.00" fill="#000000">FOREIGN KEY (transcript_id) REFERENCES transcripts (id)</text>
 </g>
 </g>

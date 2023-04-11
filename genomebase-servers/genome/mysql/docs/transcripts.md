@@ -9,17 +9,16 @@
 CREATE TABLE `transcripts` (
   `id` binary(16) NOT NULL DEFAULT (uuid_to_bin(uuid())),
   `transcript_id` varchar(255) NOT NULL,
-  `gene_model_id` binary(16) NOT NULL,
-  `gene_id` binary(16) NOT NULL,
   `transcript_type` varchar(255) NOT NULL,
   `start` int NOT NULL,
   `end` int NOT NULL,
   `strand` char(1) NOT NULL,
+  `annotation_version_id` binary(16) NOT NULL,
+  `gene_id` binary(16) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `transcript_id` (`transcript_id`,`gene_model_id`),
-  KEY `gene_model_id` (`gene_model_id`),
+  KEY `annotation_version_id` (`annotation_version_id`),
   KEY `gene_id` (`gene_id`),
-  CONSTRAINT `transcripts_ibfk_1` FOREIGN KEY (`gene_model_id`) REFERENCES `gene_models` (`id`),
+  CONSTRAINT `transcripts_ibfk_1` FOREIGN KEY (`annotation_version_id`) REFERENCES `annotation_versions` (`id`),
   CONSTRAINT `transcripts_ibfk_2` FOREIGN KEY (`gene_id`) REFERENCES `genes` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 ```
@@ -28,34 +27,32 @@ CREATE TABLE `transcripts` (
 
 ## Columns
 
-| Name            | Type         | Default             | Nullable | Extra Definition  | Children                                                                                                                                                                                                                                                                                                                                                      | Parents                       | Comment |
-| --------------- | ------------ | ------------------- | -------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- | ------- |
-| id              | binary(16)   | uuid_to_bin(uuid()) | false    | DEFAULT_GENERATED | [domain_annotations](domain_annotations.md) [go_terms_annotation](go_terms_annotation.md) [kegg_orthologies_annotation](kegg_orthologies_annotation.md) [kegg_pathways_annotation](kegg_pathways_annotation.md) [kegg_reaction_annotation](kegg_reaction_annotation.md) [kog_annotations](kog_annotations.md) [transcript_structure](transcript_structure.md) |                               |         |
-| transcript_id   | varchar(255) |                     | false    |                   |                                                                                                                                                                                                                                                                                                                                                               |                               |         |
-| gene_model_id   | binary(16)   |                     | false    |                   |                                                                                                                                                                                                                                                                                                                                                               | [gene_models](gene_models.md) |         |
-| gene_id         | binary(16)   |                     | false    |                   |                                                                                                                                                                                                                                                                                                                                                               | [genes](genes.md)             |         |
-| transcript_type | varchar(255) |                     | false    |                   |                                                                                                                                                                                                                                                                                                                                                               |                               |         |
-| start           | int          |                     | false    |                   |                                                                                                                                                                                                                                                                                                                                                               |                               |         |
-| end             | int          |                     | false    |                   |                                                                                                                                                                                                                                                                                                                                                               |                               |         |
-| strand          | char(1)      |                     | false    |                   |                                                                                                                                                                                                                                                                                                                                                               |                               |         |
+| Name | Type | Default | Nullable | Extra Definition | Children | Parents | Comment |
+| ---- | ---- | ------- | -------- | ---------------- | -------- | ------- | ------- |
+| id | binary(16) | uuid_to_bin(uuid()) | false | DEFAULT_GENERATED | [domain_annotations](domain_annotations.md) [go_terms_annotation](go_terms_annotation.md) [kegg_orthologies_annotation](kegg_orthologies_annotation.md) [kog_annotations](kog_annotations.md) [transcript_structure](transcript_structure.md) |  |  |
+| transcript_id | varchar(255) |  | false |  |  |  |  |
+| transcript_type | varchar(255) |  | false |  |  |  |  |
+| start | int |  | false |  |  |  |  |
+| end | int |  | false |  |  |  |  |
+| strand | char(1) |  | false |  |  |  |  |
+| annotation_version_id | binary(16) |  | false |  |  | [annotation_versions](annotation_versions.md) |  |
+| gene_id | binary(16) |  | false |  |  | [genes](genes.md) |  |
 
 ## Constraints
 
-| Name               | Type        | Definition                                              |
-| ------------------ | ----------- | ------------------------------------------------------- |
-| PRIMARY            | PRIMARY KEY | PRIMARY KEY (id)                                        |
-| transcript_id      | UNIQUE      | UNIQUE KEY transcript_id (transcript_id, gene_model_id) |
-| transcripts_ibfk_1 | FOREIGN KEY | FOREIGN KEY (gene_model_id) REFERENCES gene_models (id) |
-| transcripts_ibfk_2 | FOREIGN KEY | FOREIGN KEY (gene_id) REFERENCES genes (id)             |
+| Name | Type | Definition |
+| ---- | ---- | ---------- |
+| PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
+| transcripts_ibfk_1 | FOREIGN KEY | FOREIGN KEY (annotation_version_id) REFERENCES annotation_versions (id) |
+| transcripts_ibfk_2 | FOREIGN KEY | FOREIGN KEY (gene_id) REFERENCES genes (id) |
 
 ## Indexes
 
-| Name          | Definition                                                          |
-| ------------- | ------------------------------------------------------------------- |
-| gene_id       | KEY gene_id (gene_id) USING BTREE                                   |
-| gene_model_id | KEY gene_model_id (gene_model_id) USING BTREE                       |
-| PRIMARY       | PRIMARY KEY (id) USING BTREE                                        |
-| transcript_id | UNIQUE KEY transcript_id (transcript_id, gene_model_id) USING BTREE |
+| Name | Definition |
+| ---- | ---------- |
+| annotation_version_id | KEY annotation_version_id (annotation_version_id) USING BTREE |
+| gene_id | KEY gene_id (gene_id) USING BTREE |
+| PRIMARY | PRIMARY KEY (id) USING BTREE |
 
 ## Relations
 

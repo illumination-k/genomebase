@@ -18,22 +18,22 @@ CREATE TABLE `kogs` (
 
 ## Columns
 
-| Name        | Type                                                                                                          | Default | Nullable | Children                              | Parents | Comment |
-| ----------- | ------------------------------------------------------------------------------------------------------------- | ------- | -------- | ------------------------------------- | ------- | ------- |
-| id          | varchar(255)                                                                                                  |         | false    | [kog_annotations](kog_annotations.md) |         |         |
-| category    | enum('A','K','L','B','J','D','Y','V','T','M','N','Z','W','U','O','E','F','H','I','G','P','C','Q','R','S','X') |         | false    |                                       |         |         |
-| description | text                                                                                                          |         | false    |                                       |         |         |
+| Name | Type | Default | Nullable | Children | Parents | Comment |
+| ---- | ---- | ------- | -------- | -------- | ------- | ------- |
+| id | varchar(255) |  | false | [kog_annotations](kog_annotations.md) |  |  |
+| category | enum('A','K','L','B','J','D','Y','V','T','M','N','Z','W','U','O','E','F','H','I','G','P','C','Q','R','S','X') |  | false |  |  |  |
+| description | text |  | false |  |  |  |
 
 ## Constraints
 
-| Name    | Type        | Definition       |
-| ------- | ----------- | ---------------- |
+| Name | Type | Definition |
+| ---- | ---- | ---------- |
 | PRIMARY | PRIMARY KEY | PRIMARY KEY (id) |
 
 ## Indexes
 
-| Name    | Definition                   |
-| ------- | ---------------------------- |
+| Name | Definition |
+| ---- | ---------- |
 | PRIMARY | PRIMARY KEY (id) USING BTREE |
 
 ## Relations
