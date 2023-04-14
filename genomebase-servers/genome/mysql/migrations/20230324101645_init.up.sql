@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS organisms (
     codon_code INT UNSIGNED NOT NULL DEFAULT 1
 );
 
--- Genome version management
+-- Genome version management. This table records must not update after creation except fasta urls.
 -- Major version: assigned when a new version of the genomic sequence is released, which may include biologically significant changes
 -- Minor version: assigned when non-destructive changes are made, such as computational corrections
 -- Patch version: assigned when minor modifications are made, such as small sequence corrections using Sanger sequencing
@@ -29,13 +29,16 @@ CREATE TABLE IF NOT EXISTS genome_versions (
 
     fasta_uri VARCHAR(255) NOT NULL,
     fasta_index_uri VARCHAR(255) NOT NULL,
-    UNIQUE (taxonomy_id, major_version, minor_version, patch_version)
+    UNIQUE (taxonomy_id, major_version, minor_version, patch_version),
+
+    created_at DATETIME DEFAULT current_timestamp,
+    updated_at DATETIME DEFAULT current_timestamp ON UPDATE current_timestamp
 );
 
--- Annotation version management
+-- Annotation version management. This table records must not update after creation.
 -- Major version: may include the addition or deletion of gene/transcript IDs
--- Minor version: assigned when non-destructive changes are made, such as changes
--- Patch version: assigned when minor modifications are made, excluding changes in gene/transcript IDs
+-- Minor version: assigned when non-destructive changes are made, such as changes of start and end positions
+-- Patch version: assigned when minor modifications are made, such as fix of typos
 
 CREATE TABLE IF NOT EXISTS annotation_versions (
     id BINARY(16) NOT NULL PRIMARY KEY DEFAULT (UUID_TO_BIN(UUID())),
@@ -44,13 +47,16 @@ CREATE TABLE IF NOT EXISTS annotation_versions (
     minor_version INT NOT NULL,
     patch_version INT NOT NULL,
     FOREIGN KEY (genome_version_id) REFERENCES genome_versions(id),
-    UNIQUE (genome_version_id, major_version, minor_version, patch_version)
+    UNIQUE (genome_version_id, major_version, minor_version, patch_version),
+
+    created_at DATETIME DEFAULT current_timestamp
 );
 
 CREATE TABLE IF NOT EXISTS genes (
     id BINARY(16) NOT NULL PRIMARY KEY DEFAULT (UUID_TO_BIN(UUID())),
     gene_id VARCHAR(255) NOT NULL,
     annotation_version_id BINARY(16) NOT NULL,
+    UNIQUE (gene_id, annotation_version_id),
     FOREIGN KEY (annotation_version_id) REFERENCES annotation_versions(id)
 );
 
@@ -82,6 +88,15 @@ CREATE TABLE IF NOT EXISTS gene_cross_references (
     FOREIGN KEY (target_annotation_version_id) REFERENCES annotation_versions(id)
 );
 
+CREATE TABLE sequences (
+    id BINARY(16) NOT NULL PRIMARY KEY DEFAULT (UUID_TO_BIN(UUID())),
+    transcript_id BINARY(16) NOT NULL,
+    FOREIGN KEY (transcript_id) REFERENCES transcripts(id),
+
+    sequence TEXT NOT NULL,
+    sequence_type ENUM('protein', 'nucleotide') NOT NULL
+);
+
 -- Transcriptテーブル
 CREATE TABLE IF NOT EXISTS transcripts (
     id BINARY(16) NOT NULL PRIMARY KEY DEFAULT (UUID_TO_BIN(UUID())),
@@ -90,7 +105,9 @@ CREATE TABLE IF NOT EXISTS transcripts (
     start INT NOT NULL,
     end INT NOT NULL,
     strand CHAR(1) NOT NULL,
-    
+
+    -- sequence information
+
     annotation_version_id BINARY(16) NOT NULL,
     FOREIGN KEY (annotation_version_id) REFERENCES annotation_versions(id),
 
@@ -130,14 +147,15 @@ CREATE TABLE IF NOT EXISTS go_terms (
 CREATE TABLE IF NOT EXISTS go_terms_annotation (
     go_term_id VARCHAR(255) NOT NULL,
     transcript_id BINARY(16) NOT NULL,
+
+    -- go term can be annotated manually or automatically
+    -- evidence code is used to distinguish them
     evidence_code CHAR(3) NOT NULL,
     
     PRIMARY KEY (go_term_id, transcript_id),
     FOREIGN KEY (go_term_id) REFERENCES go_terms(id),
     FOREIGN KEY (transcript_id) REFERENCES transcripts(id),
 
-    -- go term can be annotated manually or automatically
-    -- evidence code is used to distinguish them
     -- annotation status columns
     created_at DATETIME DEFAULT current_timestamp,
     updated_at DATETIME DEFAULT current_timestamp ON UPDATE current_timestamp,
@@ -235,6 +253,9 @@ CREATE TABLE gff_records (
     annotation_version_id BINARY(16) NOT NULL,
     FOREIGN KEY (annotation_version_id) REFERENCES annotation_versions(id),
 
+    transcript_id BINARY(16) NOT NULL,
+    FOREIGN KEY (transcript_id) REFERENCES transcripts(id),
+
     seqname VARCHAR(255) NOT NULL,
     source VARCHAR(255) NOT NULL,
     type VARCHAR(255) NOT NULL,
@@ -243,16 +264,7 @@ CREATE TABLE gff_records (
     score FLOAT NOT NULL,
     strand CHAR(1) NOT NULL,
     phase CHAR(1) NOT NULL,
-    attributes JSON NOT NULL
+    attributes JSON NOT NULL,
 );
 
 CREATE INDEX index_gff_records_annotation_id_seqname_start_end ON gff_records (annotation_version_id, seqname, start, end);
-
--- TranscriptStructureテーブル
-CREATE TABLE IF NOT EXISTS transcript_structure (
-    transcript_id BINARY(16) NOT NULL,
-    gff_record_id BINARY(16) NOT NULL,
-    PRIMARY KEY (transcript_id, gff_record_id),
-    FOREIGN KEY (transcript_id) REFERENCES transcripts(id),
-    FOREIGN KEY (gff_record_id) REFERENCES gff_records(id)
-);
