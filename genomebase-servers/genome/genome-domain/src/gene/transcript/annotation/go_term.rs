@@ -1,7 +1,8 @@
 use anyhow::Result;
+use derive_new::new;
 use std::collections::HashMap;
 
-use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 use crate::{impl_term_serde, term_id_deserializer, term_id_serializer, TermID};
 
@@ -150,7 +151,7 @@ impl TermID for GoTermID {
 
 impl_term_serde!(GoTermID);
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, new)]
 pub struct GoTerm {
     id: GoTermID,
     name: String,
@@ -163,7 +164,7 @@ pub struct GoTerm {
     relationships: HashMap<String, Vec<GoTermID>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, new)]
 pub struct GoTermAnnotation {
     evidence_code: EvidenceCode,
     term: GoTerm,

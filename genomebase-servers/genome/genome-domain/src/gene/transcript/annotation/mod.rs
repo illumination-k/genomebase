@@ -9,7 +9,7 @@ mod kegg;
 
 #[derive(Debug, Clone, Serialize, Deserialize, new)]
 pub struct FunctionalAnnotation {
-    kog: Option<kog::Kog>,
+    pub kog: Option<kog::Kog>,
 }
 
 impl FunctionalAnnotation {

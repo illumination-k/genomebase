@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 anyhow = { workspace = true }
 async-trait = { workspace = true }
+bio = { workspace = true }
 chrono = "0.4.24"
 common = { path = "../../common" }
 derive-new = { workspace = true }

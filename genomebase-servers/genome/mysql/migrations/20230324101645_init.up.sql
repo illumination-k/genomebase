@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS genome_versions (
     minor_version INT NOT NULL,
     patch_version INT NOT NULL,
 
-    fasta_uri VARCHAR(255) NOT NULL,
-    fasta_index_uri VARCHAR(255) NOT NULL,
+    -- fasta_uri VARCHAR(255) NOT NULL,
+    -- fasta_index_uri VARCHAR(255) NOT NULL,
     UNIQUE (taxonomy_id, major_version, minor_version, patch_version),
 
     created_at DATETIME DEFAULT current_timestamp,
@@ -56,6 +56,11 @@ CREATE TABLE IF NOT EXISTS genes (
     id BINARY(16) NOT NULL PRIMARY KEY DEFAULT (UUID_TO_BIN(UUID())),
     gene_id VARCHAR(255) NOT NULL,
     annotation_version_id BINARY(16) NOT NULL,
+
+    start INT NOT NULL,
+    end INT NOT NULL,
+    strand CHAR(1) NOT NULL,
+
     UNIQUE (gene_id, annotation_version_id),
     FOREIGN KEY (annotation_version_id) REFERENCES annotation_versions(id)
 );
@@ -78,23 +83,16 @@ CREATE TABLE IF NOT EXISTS nomenclatures (
 
 CREATE TABLE IF NOT EXISTS gene_cross_references (
     source_gene_id BINARY(16) NOT NULL,
+    source_gene_gene_id VARCHAR(255) NOT NULL,
     source_annotation_version_id BINARY(16) NOT NULL,
     target_gene_id BINARY(16) NOT NULL,
+    target_gene_gene_id VARCHAR(255) NOT NULL,
     target_annotation_version_id BINARY(16) NOT NULL,
     PRIMARY KEY (source_gene_id, source_annotation_version_id, target_gene_id, target_annotation_version_id),
     FOREIGN KEY (source_gene_id) REFERENCES genes(id),
     FOREIGN KEY (source_annotation_version_id) REFERENCES annotation_versions(id),
     FOREIGN KEY (target_gene_id) REFERENCES genes(id),
     FOREIGN KEY (target_annotation_version_id) REFERENCES annotation_versions(id)
-);
-
-CREATE TABLE sequences (
-    id BINARY(16) NOT NULL PRIMARY KEY DEFAULT (UUID_TO_BIN(UUID())),
-    transcript_id BINARY(16) NOT NULL,
-    FOREIGN KEY (transcript_id) REFERENCES transcripts(id),
-
-    sequence TEXT NOT NULL,
-    sequence_type ENUM('protein', 'nucleotide') NOT NULL
 );
 
 -- Transcriptテーブル
@@ -106,8 +104,6 @@ CREATE TABLE IF NOT EXISTS transcripts (
     end INT NOT NULL,
     strand CHAR(1) NOT NULL,
 
-    -- sequence information
-
     annotation_version_id BINARY(16) NOT NULL,
     FOREIGN KEY (annotation_version_id) REFERENCES annotation_versions(id),
 
@@ -115,7 +111,7 @@ CREATE TABLE IF NOT EXISTS transcripts (
     FOREIGN KEY (gene_id) REFERENCES genes(id)
 );
 
--- Functional Annotation Tables
+-- -- Functional Annotation Tables
 
 -- Kogテーブル
 CREATE TABLE IF NOT EXISTS kogs (
@@ -247,14 +243,11 @@ CREATE TABLE IF NOT EXISTS kegg_reaction_pathway (
     FOREIGN KEY (kegg_pathway_id) REFERENCES kegg_pathways(id)
 );
 
--- # GffRecord Tables
-CREATE TABLE gff_records (
+-- GffRecord Tables
+CREATE TABLE IF NOT EXISTS gff_records (
     id BINARY(16) NOT NULL PRIMARY KEY DEFAULT (UUID_TO_BIN(UUID())),
     annotation_version_id BINARY(16) NOT NULL,
     FOREIGN KEY (annotation_version_id) REFERENCES annotation_versions(id),
-
-    transcript_id BINARY(16) NOT NULL,
-    FOREIGN KEY (transcript_id) REFERENCES transcripts(id),
 
     seqname VARCHAR(255) NOT NULL,
     source VARCHAR(255) NOT NULL,
@@ -264,7 +257,25 @@ CREATE TABLE gff_records (
     score FLOAT NOT NULL,
     strand CHAR(1) NOT NULL,
     phase CHAR(1) NOT NULL,
-    attributes JSON NOT NULL,
+    attributes JSON NOT NULL
 );
 
 CREATE INDEX index_gff_records_annotation_id_seqname_start_end ON gff_records (annotation_version_id, seqname, start, end);
+
+-- Manyt to many relationship table between transcripts and gff records
+CREATE TABLE IF NOT EXISTS transcript_gff_records (
+    transcript_id BINARY(16) NOT NULL,
+    gff_record_id BINARY(16) NOT NULL,
+    PRIMARY KEY (transcript_id, gff_record_id),
+    FOREIGN KEY (transcript_id) REFERENCES transcripts(id),
+    FOREIGN KEY (gff_record_id) REFERENCES gff_records(id)
+);
+
+-- Manyt to many relationship table between genes and gff records
+CREATE TABLE IF NOT EXISTS gene_gff_records (
+    gene_id BINARY(16) NOT NULL,
+    gff_record_id BINARY(16) NOT NULL,
+    PRIMARY KEY (gene_id, gff_record_id),
+    FOREIGN KEY (gene_id) REFERENCES genes(id),
+    FOREIGN KEY (gff_record_id) REFERENCES gff_records(id)
+);

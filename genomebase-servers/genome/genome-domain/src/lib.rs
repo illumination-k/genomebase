@@ -9,6 +9,7 @@ use derive_new::new;
 use fishers_exact::fishers_exact;
 use gene::IGeneRepository;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
+use uuid::Uuid;
 
 pub trait TermID {
     fn try_new(id: &str) -> Result<Self>
@@ -74,22 +75,92 @@ impl Organism {
     pub fn genome_versions(&self) -> &Vec<GenomeVersion> {
         &self.genome_versions
     }
+
+    pub fn genome_versions_mut(&mut self) -> &mut Vec<GenomeVersion> {
+        &mut self.genome_versions
+    }
+
+    pub fn push_genome_version(&mut self, genome_version: GenomeVersion) {
+        self.genome_versions.push(genome_version);
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize, new)]
 pub struct GenomeVersion {
+    id: Uuid,
     major: u8,
     minor: u8,
     patch: u8,
     annotation_versions: Vec<AnnotationVersion>,
 }
 
+impl GenomeVersion {
+    pub fn id(&self) -> &Uuid {
+        &self.id
+    }
+
+    pub fn major(&self) -> u8 {
+        self.major
+    }
+
+    pub fn minor(&self) -> u8 {
+        self.minor
+    }
+
+    pub fn patch(&self) -> u8 {
+        self.patch
+    }
+
+    pub fn annotation_versions(&self) -> &Vec<AnnotationVersion> {
+        &self.annotation_versions
+    }
+
+    pub fn push_annotation_version(&mut self, annotation_version: AnnotationVersion) {
+        self.annotation_versions.push(annotation_version);
+    }
+
+    pub fn extend_annotation_versions(&mut self, annotation_versions: Vec<AnnotationVersion>) {
+        self.annotation_versions.extend(annotation_versions);
+    }
+}
+
+impl ToString for GenomeVersion {
+    fn to_string(&self) -> String {
+        format!("{}.{}.{}", self.major, self.minor, self.patch)
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize, new)]
 
 pub struct AnnotationVersion {
+    id: Uuid,
     major: u8,
     minor: u8,
     patch: u8,
+}
+
+impl AnnotationVersion {
+    pub fn id(&self) -> Uuid {
+        self.id
+    }
+    
+    pub fn major(&self) -> u8 {
+        self.major
+    }
+
+    pub fn minor(&self) -> u8 {
+        self.minor
+    }
+
+    pub fn patch(&self) -> u8 {
+        self.patch
+    }
+}
+
+impl ToString for AnnotationVersion {
+    fn to_string(&self) -> String {
+        format!("{}.{}.{}", self.major, self.minor, self.patch)
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize, new)]
@@ -122,7 +193,7 @@ impl GeneModel {
 pub trait IOrganismRepository {
     async fn save_organism(&self, organism: &Organism) -> Result<()>;
     async fn list_organisms(&self) -> Result<Vec<Organism>>;
-    async fn get_organism(&self, taxonomy_id: u32) -> Result<Option<Organism>>;
+    async fn get_organism(&self, taxonomy_id: u32) -> Result<Organism>;
     async fn delete_organism(&self, taxonomy_id: u32) -> Result<()>;
 }
 
@@ -167,11 +238,7 @@ impl GenomeService {
     pub async fn list_genome_versions(&self, taxonomy_id: u32) -> Result<Vec<GenomeVersion>> {
         let organism = self.organism_repository.get_organism(taxonomy_id).await?;
 
-        Ok(if let Some(o) = organism {
-            o.genome_versions
-        } else {
-            vec![]
-        })
+        Ok(organism.genome_versions().to_owned())
     }
 
     pub async fn enrichment_test(

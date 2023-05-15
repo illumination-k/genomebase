@@ -8,13 +8,13 @@ use genome_domain::{
                 kog::{Kog, KogCategory, KogID},
                 FunctionalAnnotation,
             },
-            Strand, Transcript,
+            Transcript,
         },
-        Gene, IGeneRepository,
+        Gene, IGeneRepository, Strand,
     },
     TermID,
 };
-use sqlx::{query, query_as, MySqlPool};
+use sqlx::{query, MySqlPool};
 use uuid::Uuid;
 
 pub struct GeneRepository {
@@ -31,38 +31,17 @@ impl GeneRepository {
     }
 }
 
-#[derive(Debug)]
-struct GeneTranscriptInfo {
-    gene_id: Vec<u8>,
-    gene_gene_id: String,
-    transcript_id: Vec<u8>,
-    transcript_transcript_id: String,
-    transcript_transcript_type: String,
-    transcript_strand: String,
-    transcript_start: i32,
-    transcript_end: i32,
-    kog_id: Option<String>,
-    kog_category: Option<String>,
-    kog_description: Option<String>,
-    go_evidence_code: Option<String>,
-    go_id: Option<String>,
-    go_name: Option<String>,
-    go_namespace: Option<String>,
-    domain_start: Option<i32>,
-    domain_end: Option<i32>,
-    domain_id: Option<String>,
-    domain_name: Option<String>,
-}
-
 #[async_trait::async_trait]
 impl IGeneRepository for GeneRepository {
     async fn retrive_gene(&self, id: &str) -> Result<Gene> {
-        let records = query_as!(
-            GeneTranscriptInfo,
+        let records = query!(
             r#"
             SELECT
                 g.id as gene_id,
                 g.gene_id as gene_gene_id,
+                g.start as gene_start,
+                g.end as gene_end,
+                g.strand as gene_strand,
                 t.id as transcript_id,
                 t.transcript_id as transcript_transcript_id,
                 t.transcript_type as transcript_transcript_type,
@@ -111,6 +90,9 @@ impl IGeneRepository for GeneRepository {
                 gene = Some(Gene::new(
                     Uuid::from_slice(&record.gene_id)?,
                     record.gene_gene_id,
+                    record.gene_start,
+                    record.gene_end,
+                    Strand::try_from(record.gene_strand)?,
                     vec![],
                 ));
             }
@@ -122,7 +104,7 @@ impl IGeneRepository for GeneRepository {
                 record.transcript_transcript_type,
                 record.transcript_start,
                 record.transcript_start,
-                Strand::Minus,
+                Strand::try_from(record.transcript_strand)?,
                 vec![],
                 FunctionalAnnotation::new(None),
             ));
@@ -165,7 +147,7 @@ impl IGeneRepository for GeneRepository {
             gene.extend_transcripts(transcripts.into_values());
             Ok(gene)
         } else {
-            Err(anyhow::anyhow!("Gene not found"))
+            Err(anyhow::anyhow!("{} not found", id))
         }
     }
 

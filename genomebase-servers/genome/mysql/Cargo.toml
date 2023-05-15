@@ -10,7 +10,10 @@ anyhow = { workspace = true }
 async-trait = { workspace = true }
 futures = "0.3.27"
 genome-domain = { path = "../genome-domain" }
-sqlx = { version = "0.6.3", features = ["mysql", 'runtime-tokio-native-tls', "macros"] }
+sqlx = { version = "0.6.3", features = ["mysql", 'runtime-tokio-native-tls', "macros", "migrate"] }
 uuid = { workspace = true }
 bio = { workspace = true }
 serde_json = { version = "1.0.96", features = ["raw_value"] }
+
+[dev-dependencies]
+tempfile = { workspace = true }
