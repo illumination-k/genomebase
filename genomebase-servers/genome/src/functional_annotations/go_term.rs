@@ -125,10 +125,3 @@ pub struct GoTerm {
     is_a: Vec<GoTermID>,
     relationships: HashMap<String, Vec<GoTermID>>,
 }
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct GoTermAnnotation {
-    evidence_code: EvidenceCode,
-    term: GoTerm,
-    assinged_by: common::User,
-}
