@@ -1,0 +1,11 @@
+[workspace]
+members = [
+  "common",
+  "genome",
+  "gff",
+]
+
+[workspace.dependencies]
+serde = { version = "~1.0", features = ["derive"] }
+anyhow = "~1.0"
+uuid = { version = "1.7.0", features = ["v4", "serde"] }
