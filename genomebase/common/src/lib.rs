@@ -2,6 +2,12 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+pub enum Chromosome {
+    Char(char),
+    Number(u64),
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Paper {
     doi: String,

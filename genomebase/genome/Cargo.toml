@@ -1,5 +1,5 @@
 [package]
-name = "co-expression"
+name = "genome"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,9 +7,6 @@ edition = "2021"
 
 [dependencies]
 anyhow = { workspace = true }
-async-trait = { workspace = true }
-chrono = "0.4.23"
-co-expression-domain = { path = "./co-expression-domain" }
-mongodb = { version = "2.3.1", features = ["tokio-runtime"] }
+common = { path = "../common" }
 serde = { workspace = true }
-tokio = "1.25.0"
+uuid = { workspace = true }

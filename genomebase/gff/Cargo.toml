@@ -1,11 +1,11 @@
 [package]
-name = "co-expression-domain"
+name = "gff"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-anyhow = "1.0.68"
-async-trait = "0.1.64"
-serde = { version = "1.0.152", features = ["derive"] }
+common = { path = "../common" }
+indexmap = { version = "2.1.0", features = ["serde"] }
+serde = { workspace = true }
