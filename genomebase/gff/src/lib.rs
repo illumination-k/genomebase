@@ -16,12 +16,21 @@ pub enum Chromosome {
     Number(u8),
 }
 
+impl ToString for Chromosome {
+    fn to_string(&self) -> String {
+        match self {
+            Self::Char(c) => c.to_string(),
+            Self::Number(n) => n.to_string(),
+        }
+    }
+}
+
 impl FromStr for Chromosome {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         if s.len() == 1 {
-            Ok(Self::Char(s.chars().next().unwrap()))
+            Ok(Self::Char(s.chars().next().ok_or("missing chromosome")?))
         } else {
             Ok(Self::Number(s.parse::<u8>().map_err(|e| e.to_string())?))
         }
