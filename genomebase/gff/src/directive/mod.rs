@@ -1,8 +1,41 @@
 mod standards;
 pub use standards::*;
 
+use anyhow::Result;
 use derive_new::new;
 use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, new)]
+pub enum Directive {
+    GffVersion,
+    Species,
+    GenomeBuild,
+    SequenceRegion,
+    FeatureOntology,
+    AttributeOntology,
+    SourceOntology,
+    ForwardReferencesAreResolved,
+    StartOfFasta,
+}
+
+impl Directive {
+    pub fn from_line(line: &str) -> Result<Directive> {
+        let directive = match line {
+            line if line.starts_with("##gff-version") => Directive::GffVersion,
+            line if line.starts_with("##species") => Directive::Species,
+            line if line.starts_with("##genome-build") => Directive::GenomeBuild,
+            line if line.starts_with("##sequence-region") => Directive::SequenceRegion,
+            line if line.starts_with("##feature-ontology") => Directive::FeatureOntology,
+            line if line.starts_with("##attribute-ontology") => Directive::AttributeOntology,
+            line if line.starts_with("##source-ontology") => Directive::SourceOntology,
+            line if line.starts_with("###") => Directive::ForwardReferencesAreResolved,
+            line if line.starts_with("##FASTA") => Directive::StartOfFasta,
+            _ => anyhow::bail!("invalid directive"),
+        };
+
+        Ok(directive)
+    }
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, new)]
 pub struct DirectiveHeader {
