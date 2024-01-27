@@ -1,9 +1,31 @@
 use derive_new::new;
 use serde::{Deserialize, Serialize};
+use std::error::Error;
 use std::fmt;
 use std::str::FromStr;
 
 const DIRECTIVE_PREFIX: &str = "##";
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub enum GenomeBuildParseError {
+    Empty,
+    InvalidPrefix(String),
+    MissingName(String),
+    MissingSource(String),
+}
+
+impl fmt::Display for GenomeBuildParseError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Empty => write!(f, "empty line"),
+            Self::InvalidPrefix(line) => write!(f, "invalid prefix: {}", line),
+            Self::MissingName(line) => write!(f, "missing name: {}", line),
+            Self::MissingSource(line) => write!(f, "missing source: {}", line),
+        }
+    }
+}
+
+impl Error for GenomeBuildParseError {}
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, new)]
 pub struct GenomeBuild {
@@ -22,18 +44,22 @@ impl fmt::Display for GenomeBuild {
 }
 
 impl FromStr for GenomeBuild {
-    type Err = String;
+    type Err = GenomeBuildParseError;
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
+    fn from_str(s: &str) -> Result<Self, GenomeBuildParseError> {
         let mut parts = s.split_whitespace();
-        let prefix = parts.next().ok_or_else(|| "missing prefix".to_string())?;
+        let prefix = parts.next().ok_or_else(|| GenomeBuildParseError::Empty)?;
 
         if prefix != format!("{}genome-build", DIRECTIVE_PREFIX) {
-            return Err(format!("invalid prefix: {}", prefix));
+            return Err(GenomeBuildParseError::InvalidPrefix(prefix.to_string()));
         }
 
-        let name = parts.next().ok_or_else(|| "missing name".to_string())?;
-        let source = parts.next().ok_or_else(|| "missing source".to_string())?;
+        let name = parts
+            .next()
+            .ok_or_else(|| GenomeBuildParseError::MissingName("".to_string()))?;
+        let source = parts
+            .next()
+            .ok_or_else(|| GenomeBuildParseError::MissingSource("".to_string()))?;
 
         Ok(Self::new(name.to_string(), source.to_string()))
     }
