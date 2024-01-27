@@ -1,3 +1,5 @@
+use std::error::Error;
+use std::fmt::{self, Display, Formatter};
 use std::str::FromStr;
 
 use indexmap::IndexMap;
@@ -42,13 +44,36 @@ pub enum Tag {
 
 pub type Attributes = IndexMap<Tag, Value>;
 
-pub fn parse_attributes(attributes: &str) -> Result<Attributes, String> {
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ParseAttibuteError {
+    MissingTag(String),
+    MissingValue(String),
+    InvalidValue(String),
+}
+
+impl Display for ParseAttibuteError {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::MissingTag(tag) => write!(f, "missing tag: {}", tag),
+            Self::MissingValue(tag) => write!(f, "missing value for tag: {}", tag),
+            Self::InvalidValue(value) => write!(f, "invalid value: {}", value),
+        }
+    }
+}
+
+impl Error for ParseAttibuteError {}
+
+pub fn parse_attributes(attributes: &str) -> Result<Attributes, ParseAttibuteError> {
     let mut map = IndexMap::new();
 
     for attribute in attributes.split(';') {
         let mut parts = attribute.split('=');
-        let tag = parts.next().ok_or_else(|| "missing tag".to_string())?;
-        let value = parts.next().ok_or_else(|| "missing value".to_string())?;
+        let tag = parts
+            .next()
+            .ok_or_else(|| ParseAttibuteError::MissingTag(attribute.to_string()))?;
+        let value = parts
+            .next()
+            .ok_or_else(|| ParseAttibuteError::MissingValue(attribute.to_string()))?;
         let tag = match tag {
             "ID" => Tag::Id,
             "Name" => Tag::Name,
@@ -63,7 +88,9 @@ pub fn parse_attributes(attributes: &str) -> Result<Attributes, String> {
             "Is_circular" => Tag::IsCircular,
             _ => Tag::Other(tag.to_string()),
         };
-        let value = value.parse::<Value>()?;
+        let value = value
+            .parse::<Value>()
+            .map_err(|_| ParseAttibuteError::InvalidValue(value.to_string()))?;
         map.insert(tag, value);
     }
 

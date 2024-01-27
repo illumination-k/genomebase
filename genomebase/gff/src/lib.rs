@@ -10,25 +10,7 @@ pub(crate) const MISSING_FIELD: &str = ".";
 const FIELD_DELIMITER: char = '\t';
 const MAX_FIELDS: usize = 9;
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Hash, Eq)]
-pub enum Chromosome {
-    Char(char),
-    Number(u8),
-}
-
-impl FromStr for Chromosome {
-    type Err = String;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if s.len() == 1 {
-            Ok(Self::Char(s.chars().next().unwrap()))
-        } else {
-            Ok(Self::Number(s.parse::<u8>().map_err(|e| e.to_string())?))
-        }
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Strand {
     Forward,
     Reverse,
@@ -39,6 +21,23 @@ impl AsRef<str> for Strand {
         match self {
             Self::Forward => "+",
             Self::Reverse => "-",
+        }
+    }
+}
+
+impl Serialize for Strand {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        serializer.serialize_str(self.as_ref())
+    }
+}
+
+impl<'de> Deserialize<'de> for Strand {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let s = String::deserialize(deserializer)?;
+        match s.as_str() {
+            "+" => Ok(Self::Forward),
+            "-" => Ok(Self::Reverse),
+            _ => Err(serde::de::Error::custom(format!("invalid strand: {}", s))),
         }
     }
 }
@@ -55,7 +54,7 @@ impl FromStr for Strand {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Phase {
     Zero,
     One,
@@ -68,6 +67,24 @@ impl AsRef<str> for Phase {
             Self::Zero => "0",
             Self::One => "1",
             Self::Two => "2",
+        }
+    }
+}
+
+impl Serialize for Phase {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        serializer.serialize_str(self.as_ref())
+    }
+}
+
+impl<'de> Deserialize<'de> for Phase {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let s = String::deserialize(deserializer)?;
+        match s.as_str() {
+            "0" => Ok(Self::Zero),
+            "1" => Ok(Self::One),
+            "2" => Ok(Self::Two),
+            _ => Err(serde::de::Error::custom(format!("invalid phase: {}", s))),
         }
     }
 }
@@ -87,7 +104,7 @@ impl FromStr for Phase {
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GffRecord {
-    pub seqid: Chromosome,
+    pub seqid: String,
     pub source: String,
     pub r#type: String,
     pub start: u32,
@@ -108,7 +125,7 @@ pub fn parse_line(line: &str) -> Result<GffRecord, String> {
         ));
     }
 
-    let seqid = fields[0].parse::<Chromosome>()?;
+    let seqid = fields[0].to_string();
     let source = fields[1].to_string();
     let r#type = fields[2].to_string();
     let start = fields[3].parse::<u32>().map_err(|e| e.to_string())?;
