@@ -1,36 +1,68 @@
 mod standards;
 pub use standards::*;
 
-use anyhow::Result;
+use std::fmt::{self, Display, Formatter};
+use std::str::FromStr;
+
 use derive_new::new;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, new)]
 pub enum Directive {
-    GffVersion,
-    Species,
-    GenomeBuild,
-    SequenceRegion,
-    FeatureOntology,
-    AttributeOntology,
-    SourceOntology,
+    GffVersion(GffVersion),
+    Species(Species),
+    GenomeBuild(GenomeBuild),
+    SequenceRegion(SequenceRegion),
+    FeatureOntology(FeatureOntology),
+    AttributeOntology(AttributeOntology),
+    SourceOntology(SourceOntology),
     ForwardReferencesAreResolved,
     StartOfFasta,
 }
 
-impl Directive {
-    pub fn from_line(line: &str) -> Result<Directive> {
+impl Display for Directive {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::GffVersion(version) => write!(f, "{}", version),
+            Self::Species(species) => write!(f, "{}", species),
+            Self::GenomeBuild(build) => write!(f, "{}", build),
+            Self::SequenceRegion(region) => write!(f, "{}", region),
+            Self::FeatureOntology(ontology) => write!(f, "{}", ontology),
+            Self::AttributeOntology(ontology) => write!(f, "{}", ontology),
+            Self::SourceOntology(ontology) => write!(f, "{}", ontology),
+            Self::ForwardReferencesAreResolved => write!(f, "###"),
+            Self::StartOfFasta => write!(f, "##FASTA"),
+        }
+    }
+}
+
+impl FromStr for Directive {
+    type Err = Box<dyn std::error::Error>;
+
+    fn from_str(line: &str) -> Result<Directive, Self::Err> {
         let directive = match line {
-            line if line.starts_with("##gff-version") => Directive::GffVersion,
-            line if line.starts_with("##species") => Directive::Species,
-            line if line.starts_with("##genome-build") => Directive::GenomeBuild,
-            line if line.starts_with("##sequence-region") => Directive::SequenceRegion,
-            line if line.starts_with("##feature-ontology") => Directive::FeatureOntology,
-            line if line.starts_with("##attribute-ontology") => Directive::AttributeOntology,
-            line if line.starts_with("##source-ontology") => Directive::SourceOntology,
+            line if line.starts_with("##gff-version") => {
+                Directive::GffVersion(line.parse::<GffVersion>()?)
+            }
+            line if line.starts_with("##species") => Directive::Species(line.parse::<Species>()?),
+            line if line.starts_with("##genome-build") => {
+                Directive::GenomeBuild(line.parse::<GenomeBuild>()?)
+            }
+            line if line.starts_with("##sequence-region") => {
+                Directive::SequenceRegion(line.parse::<SequenceRegion>()?)
+            }
+            line if line.starts_with("##feature-ontology") => {
+                Directive::FeatureOntology(line.parse::<FeatureOntology>()?)
+            }
+            line if line.starts_with("##attribute-ontology") => {
+                Directive::AttributeOntology(line.parse::<AttributeOntology>()?)
+            }
+            line if line.starts_with("##source-ontology") => {
+                Directive::SourceOntology(line.parse::<SourceOntology>()?)
+            }
             line if line.starts_with("###") => Directive::ForwardReferencesAreResolved,
             line if line.starts_with("##FASTA") => Directive::StartOfFasta,
-            _ => anyhow::bail!("invalid directive"),
+            _ => return Err(format!("invalid directive: {}", line).into()),
         };
 
         Ok(directive)
